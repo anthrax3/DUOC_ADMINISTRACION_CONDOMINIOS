@@ -1,0 +1,233 @@
+﻿@{
+    ViewBag.Title = "Configuracion";
+    Layout = "~/Views/Compartida/_PaginaDiseño2.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h3>
+            <strong>EDITAR MI INFORMACIÓN</strong>
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+        </h3>
+        <hr />
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="personal" class="alert alert-info">
+                        <h3>Información Modificable</h3>
+                        <p class="help-block">Perfil de @Session["NomPerfil"].ToString()</p>
+                        <hr />
+                        <div class="form-group">
+                            <label>Primer Nombre</label>**
+                            <input type="text" id="txtNom" class="form-control">
+                            <label>Segundo Nombre</label>
+                            <input type="text" id="txtSegn" class="form-control">
+                            <label>Apellido Paterno</label>**
+                            <input type="text" id="txtApp" class="form-control">
+                            <label>Apellido Materno</label>
+                            <input type="text" id="txtApm" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento</label>**
+                            <input id="txtFecha" type="date" max="1999-01-01"  class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefono</label>
+                            <input id="txtFono" class="form-control" type="number" min="100000000" max="9999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>**
+                            <input id="txtCorreo" class="form-control" type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSexo">Sexo</label>**
+                            <select id="txtSexo" class="form-control">
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nueva Contraseña</label>
+                            <input id="txtClaveNueva" class="form-control" type="text">
+                        </div>
+                        <hr />
+                        <p class="help-block">Para modificar sus datos, debe indicar su contraseña actual..</p>
+                        <div class="form-group">
+                            <label>Contraseña Actual</label>**
+                            <input id="txtClaveActual" class="form-control" type="password">
+                        </div>
+                        <button type="button" class="btn btn-info" onclick="actualizarDatos()">Actualizar Mis Datos</button>   
+                    </div>                    
+                </div>
+                <!-- .panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+</div>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<script src="~/Scripts/jquery.js"></script>
+<script>
+
+        $(document).ready(function () {
+
+            infoUsuario();
+
+        });
+        function CustomAlert() {
+            this.render = function (dialog) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+                document.getElementById('dialogboxhead').innerHTML = "Información";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+            }
+            this.ok = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Alert = new CustomAlert();
+
+    function infoUsuario() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerInfoUsuarioPorUsuario", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+
+                if (respuesta.model != null) {
+                    var celda = respuesta.model.toString().split(";");
+                    $("#txtNom").val(celda[0]);
+                    $("#txtSegn").val(celda[1]);
+                    $("#txtApp").val(celda[2]);
+                    $("#txtApm").val(celda[3]);
+                    var _fecha = celda[5].toString().split('-');
+                    var ani = _fecha[2];
+                    var mes = _fecha[1];
+                    var dia = _fecha[0];
+                    $("#txtFecha").val(ani+'-'+mes+'-'+dia);
+                    $("#txtFono").val(celda[6]);
+                    $("#txtCorreo").val(celda[7]);
+                    $("#txtSexo option[value=" + celda[8] + "]").attr("selected", true);
+
+                } else {
+                    Alert.render('No se han encontrado datos para cargar');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener información del usuario"');
+            }
+        });
+    }
+
+    function actualizarDatos()
+    {
+        var primerNom = $("#txtNom").val();
+        var segNom = $("#txtSegn").val();
+        var app = $("#txtApp").val();
+        var apm = $("#txtApm").val();
+        var fecha = $("#txtFecha").val();
+        var fono = $("#txtFono").val();
+        var correo = $("#txtCorreo").val();
+        var sexo = $("#txtSexo").val();
+        var nueva = $("#txtClaveNueva").val();
+        var actual = $("#txtClaveActual").val();
+        var newis = "";
+        var _usuario = $("#lb_usuario").val();
+        var valida = true;
+        if (actual.length < 6) {
+            Alert.render('Para guardar los cambios debe indicar su contraseña actual');
+        } else {
+            if (nueva != "") {
+                if (nueva.length <= 6) {
+                    Alert.render('La nueva contraseña debe tener al menos 6 caracteres');
+                    valida = false;
+                } else {
+                    newis = nueva;
+                }
+            }
+            if (valida) {
+                if (primerNom.length < 3) {
+                    Alert.render('Debe indicar su primer nombre caracteres');
+                } else {
+                    if (app.length < 3) {
+                        Alert.render('Debe indicar su apellido paterno');
+                    } else {
+                        if (fecha == "") {
+                            Alert.render('Debe indicar una fecha de nacimiento');
+
+                        } else {
+                            if (correo.length < 5) {
+                                Alert.render('Debe indicar un correo eletrónico');
+
+                            } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '@Url.Action("IniciarSesion", "Inicio")',
+                                    content: "application/json; charset=utf-8",
+                                    dataType: "json",
+                                    data: { "Usuario": _usuario, "Clave": actual },
+                                    success: function (respuesta) {
+
+                                        if (respuesta.model == '1') {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: '@Url.Action("ActualizarUsuario", "Usuario")',
+                                                content: "application/json; charset=utf-8",
+                                                dataType: "json",
+                                                data: { "Primero": primerNom, "Segundo": segNom, "ApPat": app, "ApMat": apm, "Fecha": fecha, "Fono": fono, "Correo": correo, "Sexo": sexo, "Nueva": newis },
+                                                success: function (respuesta) {
+                                                    if (respuesta.model != null) {
+                                                        infoUsuario();
+                                                        Alert.render('Datos actualizados correctamente');
+
+                                                    } else {
+                                                        Alert.render('No se han conseguido actualizar sus datos');
+                                                    }
+                                                },
+                                                error: function (xhr, textStatus, errorThrown) {
+                                                    Alert.render('Error: No se pudo cargar método "Actualizar Información Usuario"');
+                                                }
+                                            });
+                                        } else if (respuesta.model == '2') {
+                                            Alert.render('La clave actual ingresada es incorrecta');
+                                        }
+                                    },
+                                    error: function (xhr, textStatus, errorThrown) {
+                                        Alert.render('Error: No se pudo cargar método "Validar contraseña"');
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+</script>

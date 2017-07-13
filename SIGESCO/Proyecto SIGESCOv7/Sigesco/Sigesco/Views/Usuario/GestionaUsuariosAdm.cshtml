@@ -1,0 +1,1054 @@
+﻿@{
+    ViewBag.Title = "Gestionar Usuarios";
+    Layout = "~/Views/Compartida/_PaginaDiseño5.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["Perfil"].ToString()">
+        </h2>
+    </div>
+    <div class="row">
+        <h3>
+            <strong>ADMINISTRAR USUARIOS</strong>
+        </h3>
+        <hr />
+    </div>
+    <div class="row" id="tabla_reserv">
+        <div class="col-lg-12">
+            <form class="form-inline well">
+                <label for="selectCondominio">Condominio</label>
+                <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio">
+                    <option value="">Seleccione</option>
+                </select>
+                <hr />
+                    <button type="button" class="btn btn-primary" onclick="verCrear()" >Crear Persona, Luego Asignar Perfil</button>
+                    <button type="button" class="btn btn-warning" onclick="verAsignar()" >Crear Usuario</button>
+                    <button type="button" class="btn btn-default" onclick="verAsignarCond()">Sólo Asignar Condominio</button>
+                    <button type="button" class="btn btn-info" onclick="verModUsu()">Modificar Clave Usuario</button>
+                    <button type="button" class="btn btn-danger" onclick="verEliminar()">Eliminar Usuario</button>
+            </form>
+            <br />
+            <div class="panel panel-default" id="panelCrear" hidden>
+                <div class="panel-heading">
+                    Crear Persona y Asignar Perfil
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="personal" class="alert alert-warning">
+                        <h3>Información Personal</h3>
+                        <hr />
+                        <div class="form-group">
+                            <label>Primer Nombre</label>**
+                            <input type="text" id="txtNom" class="form-control">
+                            <label>Segundo Nombre</label>
+                            <input type="text" id="txtSegn" class="form-control">
+                            <label>Apellido Paterno</label>**
+                            <input type="text" id="txtApp" class="form-control">
+                            <label>Apellido Materno</label>
+                            <input type="text" id="txtApm" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Rut</label>**
+                            <input id="txtRut" class="form-control" placeholder="Ej: 12345678-9 / 12345678-k / 12345678-K">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento</label>**
+                            <input id="txtFecha" type="date" max="1999-01-01" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefono</label>
+                            <input id="txtFono" class="form-control" type="number" min="100000000" max="9999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>**
+                            <input id="txtCorreo" class="form-control" type="email" placeholder="ejemplo@micorreo.cl">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSexo">Sexo</label>**
+                            <select id="txtSexo" class="form-control">
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="usuarioInfo" class="alert alert-warning">
+                        <h3>Información de Usuario</h3>
+                        <hr />
+                        <p class="help-block">El usuario le será indicado una vez que grabe los datos</p>
+                        <div class="form-group">
+                            <label for="txtPerfil1">Perfil</label>**
+                            <select id="txtPerfil1" class="form-control">
+                                <option value="">Seleccione</option>
+                                <option value="1">Residente</option>
+                                <option value="2">Directiva</option>
+                                <option value="3">Conserje</option>
+                                <option value="4">Administrador</option>
+                            </select>
+                        </div>
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Seleccion</th>
+                                    <th>Nombre Condominio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo"></tbody>
+                        </table>
+                        <div class="form-group">
+                            <label>Contraseña</label>**
+                            <input id="txtClaveActual" class="form-control" type="text" placeholder="prefiera una combinación entre números y letras">
+                        </div>
+                        <div class="form-group">
+                            <label>Repetir Contraseña</label>**
+                            <input id="txtClaveNueva" class="form-control" type="text">
+                        </div>
+                    </div>                    
+                    <div class="btn-group" data-toggle="buttons">
+                        <input type="button" class="btn btn-primary" onclick="crearResidente()" value="Crear Usuario">
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel -->
+            <div class="panel panel-default" id="panelAsignar" hidden>
+                <div class="panel-heading">
+                    Asignar Usuario a Persona Existente
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="alert alert-warning">
+
+                        <div class="form-inline">
+                            <label for="selectPersona">Seleccione Persona</label>
+                            <select class="form-control" name="selectPersona" id="selectPersona">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <div class="form-group">
+                                <label for="txtPerfil2">Perfil</label>**
+                                <select id="txtPerfil2" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    <option value="1">Residente</option>
+                                    <option value="2">Directiva</option>
+                                    <option value="3">Conserje</option>
+                                    <option value="4">Administrador</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>**
+                            <input id="txtClaveActual2" class="form-control" type="text" placeholder="prefiera una combinación entre números y letras">
+                        </div>
+                        <div class="form-group">
+                            <label>Repetir Contraseña</label>**
+                            <input id="txtClaveNueva2" class="form-control" type="text">
+                        </div>
+                        <br />
+                        <div class="btn-group" data-toggle="buttons">
+                            <input type="button" class="btn btn-danger" onclick="Asignar()" value="Crear Usuario">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+               
+        </div>
+
+            <div class="panel panel-default" id="panelAsignarCondominio" hidden>
+                <div class="panel-heading">
+                    Asignar Condominio a Usuario Existente
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="alert alert-warning">
+
+                        <div class="form-group">
+                            <label for="selectPersona3">Seleccione Persona</label>
+                            <select class="form-control" name="selectPersona3" id="selectPersona3" onchange="cargarUsuario2()">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <label for="selectUsuario3">Seleccione Usuario</label>
+                            <select class="form-control" name="selectUsuario3" id="selectUsuario3" onchange="cargarCondominio3()">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <label for="selectCondominio3">Condominio a Asignar</label>
+                            <select class="form-control" name="selectCondominio3" id="selectCondominio3">
+                                <option value="">Seleccione</option>
+                            </select>
+                        </div>
+                        <br />
+                        <div class="btn-group" data-toggle="buttons">
+                            <input type="button" class="btn btn-danger" onclick="AsignarCondominio3()" value="Asignar Condominio">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+            <div class="panel panel-default" id="ModificarUsuario" hidden>
+                <div class="panel-heading">
+                    Modificar Usuario
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="alert alert-warning">
+                        <div class="form-group">
+                            <label for="selectPersona4">Seleccione Persona</label>
+                            <select class="form-control" name="selectPersona4" id="selectPersona4" onchange="cargarUsuario3()">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <label for="selectUsuario4">Seleccione Usuario</label>
+                            <select class="form-control" name="selectUsuario4" id="selectUsuario4">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <div class="form-group">
+                                <label>Contraseña</label>**
+                                <input id="txtClaveActual4" class="form-control" type="text" placeholder="prefiera una combinación entre números y letras">
+                            </div>
+                            <div class="form-group">
+                                <label>Repetir Contraseña</label>**
+                                <input id="txtClaveNueva4" class="form-control" type="text">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="btn-group" data-toggle="buttons">
+                            <input type="button" class="btn btn-danger" onclick="ModificarUsuario4()" value="Modificar Clave Usuario">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+            <div class="panel panel-default" id="EliminarUsuario" hidden>
+                <div class="panel-heading">
+                    Eliminar Usuario
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="alert alert-warning">
+                        <div class="form-inline">
+                            <label for="selectPersona5">Seleccione Persona</label>
+                            <select class="form-control" name="selectPersona5" id="selectPersona5" onchange="cargarUsuario4()">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <label for="selectUsuario5">Seleccione Usuario</label>
+                            <select class="form-control" name="selectUsuario5" id="selectUsuario5">
+                                <option value="">Seleccione</option>
+                            </select>
+                        </div>
+                        <br />
+                        <div class="btn-group" data-toggle="buttons">
+                            <input type="button" class="btn btn-danger" onclick="EliminarUsuario5()" value="Eliminar Usuario">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        <!-- /.container-fluid -->
+        <div id="dialogoverlay"></div>
+        <div id="dialogbox">
+            <div>
+                <div id="dialogboxhead"></div>
+                <div id="dialogboxbody"></div>
+                <div id="dialogboxfoot"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#panelTabla").hide();
+        cargarMisCondominios();
+        cargarCondominio3()
+
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function cargarMisCondominios() {
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    $("#cuerpo").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                            var nuevafila2 = "<tr><td>" +
+                            '<input name="CondominioSelecion" type="checkbox" value="'+celda[0]+'"></td><td>'+
+                            celda[1] + "</td></tr>"
+                            $("#tabla").append(nuevafila2)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener condominios por usuario"');
+            }
+        });
+    }
+
+    function verCrear() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "")
+        {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia1").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Panta '+celda[3] + "</option>"
+                            $("#selectResidencia1").append(nuevafila)
+                        }
+
+                          $("#EliminarUsuario").hide();
+                          $("#panelAsignarCondominio").hide();
+                          $("#ModificarUsuario").hide();
+                          $("#panelAsignar").hide();
+                          $("#panelCrear").show();
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    function crearResidente() {
+        var contar = 0;
+        var perfil = $('select#txtPerfil1').val();
+        var rut = $("#txtRut").val();
+        var valido = "inválido";
+        var primerNom = $("#txtNom").val();
+        var segNom = $("#txtSegn").val();
+        var app = $("#txtApp").val();
+        var apm = $("#txtApm").val();
+        var fecha = $("#txtFecha").val();
+        var fono = $("#txtFono").val();
+        var email = $("#txtCorreo").val();
+        var sexo = $("#txtSexo").val();
+        var pass = $("#txtClaveActual").val();
+        var pass2 = $("#txtClaveNueva").val();
+        var selectedItems = new Array();
+        $("input[name=CondominioSelecion]:checked").each(function () {
+            selectedItems.push($(this).val());
+            contar = contar + 1;
+        });
+        var largo = selectedItems.length;
+        var condominios = "";
+        for (i = 0; i < largo; i++) {
+            condominios = condominios + ',' + selectedItems[i];
+        }
+
+        if (contar == 0) {
+            Alert.render('Debe seleccionar al menos 1 registro de la tabla de condominios');
+        }
+        else {
+            if (primerNom == "" || primerNom.length < 3) {
+                Alert.render('Debe ingresar un primer nombre');
+            } else {
+                if (app == "" || app.length < 3) {
+                    Alert.render('Debe ingresar un apellido paterno');
+                } else {
+                    if (rut == "") {
+                        Alert.render('Debe ingresar un rut ');
+                    } else {
+                        valido = Fn.validaRut(rut) ? 'Valido' : 'inválido'
+                        if (valido == "inválido") {
+                            Alert.render('Debe ingresar un rut válido');
+                        }
+                        else {
+                            if (fecha == "") {
+                                Alert.render('Debe ingresar una fecha de nacimiento');
+                            } else {
+                                if (!valEmail(email)) {
+                                    Alert.render('Debe ingresar un correo válido');
+                                } else {
+                                    if (pass.length < 6) {
+                                        Alert.render('La contraseña debe tener al menos 6 caracteres');
+                                    } else {
+                                        if (pass != pass2) {
+                                            Alert.render('Las contraseñas no coinciden');
+                                        } else {
+                                            if (perfil == "") {
+                                                Alert.render('Debe indicar un perfil');
+                                            } else {
+                                                var datos = {
+                                                    "Rut": rut,
+                                                    "PrimerNom": primerNom,
+                                                    "SegNom": segNom,
+                                                    "ApePat": app,
+                                                    "ApeMat": apm,
+                                                    "Fecha": fecha,
+                                                    "Fono": fono,
+                                                    "Email": email,
+                                                    "Sexo": sexo,
+                                                    "Pass": pass,
+                                                    "Condominios": condominios
+                                                }
+
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: '@Url.Action("CrearUsuario", "Usuario")',
+                                                    content: "application/json; charset=utf-8",
+                                                    dataType: "json",
+                                                    data: datos,
+                                                    success: function (respuesta) {
+                                                        var datos = respuesta.model.split(";");
+                                                        if (datos[0].toString() != '0') {
+                                                            Alert.render('El usuario Creado: ' + datos[0] + ' Clave asignada: ' + pass);
+                                                            limpiar();
+                                                            $("#EliminarUsuario").hide();
+                                                            $("#panelAsignarCondominio").hide();
+                                                            $("#ModificarUsuario").hide();
+                                                            $("#panelAsignar").hide();
+                                                            $("#panelCrear").hide();
+                                                            limpiar();
+
+                                                        } else {
+                                                            Alert.render('El usuario ya está registrado en la base de datos, seleccione el modo "Sólo asignar residencia"');
+                                                            $("#EliminarUsuario").hide();
+                                                            $("#panelAsignarCondominio").hide();
+                                                            $("#ModificarUsuario").hide();
+                                                            $("#panelAsignar").hide();
+                                                            $("#panelCrear").hide();
+                                                            limpiar();
+                                                        }
+                                                    },
+                                                    error: function (xhr, textStatus, errorThrown) {
+                                                        Alert.render('Error: No se pudo cargar método "Ingresar nuevo residente"');
+                                                    }
+                                                });
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function verAsignar() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "") {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia2").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia2").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Planta ' + celda[3] + "</option>"
+                            $("#selectResidencia2").append(nuevafila)
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetPersonas", "Usuario")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (respuesta) {
+                                if (respuesta.model != "") {
+                                    $("#selectPersona").empty()
+                                    var filas = respuesta.model.length;
+                                    $("#selectPersona").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila =
+                                            "<option value=" + celda[0] + ">" + celda[1] + ' :: ' + celda[2] + ' ' + celda[3] + "</option>"
+                                        $("#selectPersona").append(nuevafila)
+                                    }
+
+                                    $("#EliminarUsuario").hide();
+                                    $("#panelAsignarCondominio").hide();
+                                    $("#ModificarUsuario").hide();
+                                    $("#panelAsignar").show();
+                                    $("#panelCrear").hide();
+                                } else {
+                                    Alert.render('No se han encontrado personas en el sistema');
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error: No se pudo cargar método "Obtener personas"');
+                            }
+                        });
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    function Asignar() {
+        var persona = $('select#selectPersona').val();
+        var perfil = $('select#txtPerfil2').val();
+        var clave1 = $('#txtClaveActual2').val();
+        var clave2 = $('#txtClaveNueva2').val();
+
+        if (persona == "") {
+            Alert.render('Debe seleccionar a una persona');
+        } else {
+            if (perfil == "") {
+                Alert.render('Debe seleccionar un perfil para asignar');
+            } else {
+                if (clave1.length < 6) {
+                    Alert.render('La contraseña debe tener la menos 6 caracteres');
+                } else {
+                    if (clave1 != clave2) {
+                        Alert.render('Las contraseñas no coinciden');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("CrearSoloUsuario", "Usuario")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Perfil": perfil, "Persona": persona, "Clave": clave1 },
+                            success: function (respuesta) {
+                                var datos = respuesta.model.split(";");
+                                if (datos[0].toString() != '0') {
+                                    Alert.render('El usuario Creado: ' + datos[0] + ' Clave asignada: ' + clave1);
+                                    limpiar();
+                                    $("#EliminarUsuario").hide();
+                                    $("#panelAsignarCondominio").hide();
+                                    $("#ModificarUsuario").hide();
+                                    $("#panelAsignar").hide();
+                                    $("#panelCrear").hide();
+
+                                } else {
+                                    Alert.render('El usuario ya esta registrado en con ese perfil');
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error: No se pudo cargar método "Ingresar nuevo usuario"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+    }
+
+    function verAsignarCond() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPersonas", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+                if (respuesta.model != "") {
+                    $("#selectPersona3").empty()
+                    var filas = respuesta.model.length;
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + ' :: ' + celda[2] + ' ' + celda[3] + "</option>"
+                        $("#selectPersona3").append(nuevafila)
+                    }
+
+                    $("#EliminarUsuario").hide();
+                    $("#panelAsignarCondominio").show();
+                    $("#ModificarUsuario").hide();
+                    $("#panelAsignar").hide();
+                    $("#panelCrear").hide();
+                } else {
+                    Alert.render('No se han encontrado personas en el sistema');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener personas"');
+            }
+        });
+
+    }
+
+    function cargarUsuario2() {
+        var persona = $('select#selectPersona3').val();
+        if (persona == "") {
+            Alert.render('Debe seleccionar una persona para cargar sus usuarios');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerUsuariosPorPersona", "Usuario")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Persona": persona },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectUsuario3").empty()
+                        var filas = respuesta.model.length;
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var usuario = "";
+                            if (celda[1].toString() == '1') {
+                                usuario = "Residente";
+                            }
+                            if (celda[1].toString() == '2') {
+                                usuario = "Directiva Condominio";
+                            }
+                            if (celda[1].toString() == '3') {
+                                usuario = "Conserje";
+                            }
+                            if (celda[1].toString() == '4') {
+                                usuario = "Administrador Condominio";
+                            }
+                            var nuevafila =
+
+                                "<option value=" + celda[0] + ">" + usuario + "</option>"
+                            $("#selectUsuario3").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado usuarios para esa persona');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener usuario"');
+                }
+            });
+        }
+    }
+
+    function cargarCondominio3() {
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio3").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio3").empty()
+                    $("#cuerpo").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio3").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio3").append(nuevafila)
+                            var nuevafila2 = "<tr><td>" +
+                            '<input name="CondominioSelecion" type="checkbox" value="'+celda[0]+'"></td><td>'+
+                            celda[1] + "</td></tr>"
+                            $("#tabla").append(nuevafila2)
+                    }
+                    $("#selectCondominio3").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener condominios por usuario"');
+            }
+        });
+    }
+
+    function AsignarCondominio3() {
+        var condominio = $('select#selectCondominio3').val();
+        var usuario = $('select#selectUsuario3').val();
+
+        if (condominio == "") {
+            Alert.render('Debe seleccionar un condominio a asignar');
+        } else {
+            if (usuario == "") {
+                Alert.render('Debe seleccionar un usuario a asignar');
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AgragarCondominioUsuario", "Usuario")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Usuario": usuario, "Condominio": condominio },
+                    success: function (respuesta) {
+                        if (respuesta.model) {
+
+                            Alert.render('El usuario fue asignado correctamente');
+                            $("#EliminarUsuario").hide();
+                            $("#panelAsignarCondominio").hide();
+                            $("#ModificarUsuario").hide();
+                            $("#panelAsignar").hide();
+                            $("#panelCrear").hide();
+
+                        } else {
+                            Alert.render('El ususario ya posee ese condominio asignado');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error: No se pudo cargar método "Asignar condominios por usuario"');
+                    }
+                });
+            }
+        }
+
+    }
+
+    function verModUsu() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPersonas", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+                if (respuesta.model != "") {
+                    $("#selectPersona4").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectPersona4").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + ' :: ' + celda[2] + ' ' + celda[3] + "</option>"
+                        $("#selectPersona4").append(nuevafila)
+                    }
+
+                    $("#EliminarUsuario").hide();
+                    $("#panelAsignarCondominio").hide();
+                    $("#ModificarUsuario").show();
+                    $("#panelAsignar").hide();
+                    $("#panelCrear").hide();
+                } else {
+                    Alert.render('No se han encontrado personas en el sistema');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener personas"');
+            }
+        });
+
+    }
+
+
+    function cargarUsuario3() {
+        var persona = $('select#selectPersona4').val();
+        if (persona == "") {
+            Alert.render('Debe seleccionar una persona para cargar sus usuarios');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerUsuariosPorPersona", "Usuario")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Persona": persona },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectUsuario4").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectUsuario4").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var usuario = "";
+                            if (celda[1].toString() == '1') {
+                                usuario = "Residente";
+                            }
+                            if (celda[1].toString() == '2') {
+                                usuario = "Directiva Condominio";
+                            }
+                            if (celda[1].toString() == '3') {
+                                usuario = "Conserje";
+                            }
+                            if (celda[1].toString() == '4') {
+                                usuario = "Administrador Condominio";
+                            }
+                            var nuevafila =
+
+                                "<option value=" + celda[0] + ">" + usuario + "</option>"
+                            $("#selectUsuario4").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado usuarios para esa persona');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener usuario"');
+                }
+            });
+        }
+
+    }
+
+    function ModificarUsuario4() {
+        var usuario = $('select#selectUsuario4').val();
+        var clave = $('#txtClaveActual4').val();
+        var clave2 = $('#txtClaveNueva4').val();
+
+
+        if (usuario == "") {
+            Alert.render('Debe seleccionar un usuario para cargar sus datos');
+
+        } else {
+            if (clave.length < 6) {
+                Alert.render('Debe ingresar una clave con al menos 6 digitos');
+            } else {
+                if (clave != clave2) {
+                    Alert.render('Las contraseñas no coinciden');
+                } else {
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("ActualizarClave", "Usuario")',
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: { "Usuario": usuario, "Clave": clave },
+                        success: function (respuesta) {
+                            if (respuesta.model) {
+                                Alert.render('Clave actualizada exitosamente');
+
+                                $("#EliminarUsuario").hide();
+                                $("#panelAsignarCondominio").hide();
+                                $("#ModificarUsuario").hide();
+                                $("#panelAsignar").hide();
+                                $("#panelCrear").hide();
+                            } else {
+                                Alert.render('No se ha podido actualizar la contraseña');
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            Alert.render('Error: No se pudo cargar método "Actualizar clave"');
+                        }
+                    });
+                }
+            }
+
+        }
+
+    }
+
+
+    function verEliminar() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPersonas", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+                if (respuesta.model != "") {
+                    $("#selectPersona5").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectPersona5").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + ' :: ' + celda[2] + ' ' + celda[3] + "</option>"
+                        $("#selectPersona5").append(nuevafila)
+                    }
+
+                    $("#EliminarUsuario").show();
+                    $("#panelAsignarCondominio").hide();
+                    $("#ModificarUsuario").hide();
+                    $("#panelAsignar").hide();
+                    $("#panelCrear").hide();
+                } else {
+                    Alert.render('No se han encontrado personas en el sistema');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener personas"');
+            }
+        });
+    }
+
+    function cargarUsuario4() {
+        var persona = $('select#selectPersona5').val();
+        if (persona == "") {
+            Alert.render('Debe seleccionar una persona para cargar sus usuarios');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerUsuariosPorPersona", "Usuario")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Persona": persona },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectUsuario5").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectUsuario5").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var usuario = "";
+                            if (celda[1].toString() == '1') {
+                                usuario = "Residente";
+                            }
+                            if (celda[1].toString() == '2') {
+                                usuario = "Directiva Condominio";
+                            }
+                            if (celda[1].toString() == '3') {
+                                usuario = "Conserje";
+                            }
+                            if (celda[1].toString() == '4') {
+                                usuario = "Administrador Condominio";
+                            }
+                            var nuevafila =
+
+                                "<option value=" + celda[0] + ">" + usuario + "</option>"
+                            $("#selectUsuario5").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado usuarios para esa persona');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener usuario"');
+                }
+            });
+        }
+
+    }
+
+    function EliminarUsuario5() {
+        var usuario = $('select#selectUsuario5').val();
+        if (usuario == "") {
+            Alert.render('Debe seleccionar un usuario para cargar sus datos');
+
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EliminarUsuario", "Usuario")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Usuario": usuario },
+                success: function (respuesta) {
+                    if (respuesta.model) {
+                        Alert.render('Usuario eliminado exitosamente');
+                    } else {
+                        Alert.render('No se ha podido eliminar al usuario');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Eliminar Usuario"');
+                }
+            });
+
+        }
+    }
+
+    function limpiar() {
+        $("#txtRut").val("");
+        $("#txtNom").val("");
+        $("#txtSegn").val("");
+        $("#txtApp").val("");
+        $("#txtApm").val("");
+        $("#txtFecha").val("");
+        $("#txtFono").val("");
+        $("#txtCorreo").val("");
+        $("#txtClaveActual").val("");
+        $("#txtClaveNueva").val("");
+        $("#selectResidencia1").val("");
+    }
+
+
+    var Fn = {
+        // Valida el rut con su cadena completa "XXXXXXXX-X"
+        dv: function (T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10))
+                S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        },
+        validaRut: function (rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) {
+                Alert.render('Debe ingresar rut en formato indicado');
+                return false;
+            }
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        }
+
+    }
+
+    function valEmail(valor){
+        re=/^[_a-z0-9-]+(.[_a-z0-9-]+)*@@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/
+        if(!re.exec(valor))    {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+</script>
+
+

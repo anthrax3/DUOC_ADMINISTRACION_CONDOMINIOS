@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Model_CondominioStoreContainer" CdmEntityContainer="Entities_Condominios">
+    <EntitySetMapping Name="ADMINISTRADOR">
+      <EntityTypeMapping TypeName="Model_Condominio.ADMINISTRADOR">
+        <MappingFragment StoreEntitySet="ADMINISTRADOR">
+          <ScalarProperty Name="ADM_RUT" ColumnName="ADM_RUT" />
+          <ScalarProperty Name="ADM_DV" ColumnName="ADM_DV" />
+          <ScalarProperty Name="ADM_RAZON_SOCIAL" ColumnName="ADM_RAZON_SOCIAL" />
+          <ScalarProperty Name="ADM_DIRECCION" ColumnName="ADM_DIRECCION" />
+          <ScalarProperty Name="ADM_TELEFONO" ColumnName="ADM_TELEFONO" />
+          <ScalarProperty Name="ADM_CORREO" ColumnName="ADM_CORREO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COMUNA">
+      <EntityTypeMapping TypeName="Model_Condominio.COMUNA">
+        <MappingFragment StoreEntitySet="COMUNA">
+          <ScalarProperty Name="CMN_ID_COMUNA" ColumnName="CMN_ID_COMUNA" />
+          <ScalarProperty Name="CMN_DESCRIPCION" ColumnName="CMN_DESCRIPCION" />
+          <ScalarProperty Name="REGION_RG_ID_REGION" ColumnName="REGION_RG_ID_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CONDOMINIO">
+      <EntityTypeMapping TypeName="Model_Condominio.CONDOMINIO">
+        <MappingFragment StoreEntitySet="CONDOMINIO">
+          <ScalarProperty Name="CN_ID_CONDOMINIO" ColumnName="CN_ID_CONDOMINIO" />
+          <ScalarProperty Name="CN_NOMBRE" ColumnName="CN_NOMBRE" />
+          <ScalarProperty Name="CN_DIRECCION" ColumnName="CN_DIRECCION" />
+          <ScalarProperty Name="CN_CANTIDAD_DEPTO" ColumnName="CN_CANTIDAD_DEPTO" />
+          <ScalarProperty Name="ADMINISTRADOR_ADM_RUT" ColumnName="ADMINISTRADOR_ADM_RUT" />
+          <ScalarProperty Name="CN_ID_COMUNA" ColumnName="CN_ID_COMUNA" />
+          <ScalarProperty Name="COMUNA_CMN_ID_COMUNA" ColumnName="COMUNA_CMN_ID_COMUNA" />
+          <ScalarProperty Name="COMUNA_RG_ID_REGION" ColumnName="COMUNA_RG_ID_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DEPARTAMENTO">
+      <EntityTypeMapping TypeName="Model_Condominio.DEPARTAMENTO">
+        <MappingFragment StoreEntitySet="DEPARTAMENTO">
+          <ScalarProperty Name="DPT_ID_DEPTO" ColumnName="DPT_ID_DEPTO" />
+          <ScalarProperty Name="DPT_NUMERO" ColumnName="DPT_NUMERO" />
+          <ScalarProperty Name="TIPO_DEPARTAMENTO_TDP_ID_TIPO" ColumnName="TIPO_DEPARTAMENTO_TDP_ID_TIPO" />
+          <ScalarProperty Name="CONDOMINIO_CN_ID_CONDOMINIO" ColumnName="CONDOMINIO_CN_ID_CONDOMINIO" />
+          <ScalarProperty Name="DPT_SEGURO" ColumnName="DPT_SEGURO" />
+          <ScalarProperty Name="DPT_MONTO_SEGURO" ColumnName="DPT_MONTO_SEGURO" />
+          <ScalarProperty Name="CONDOMINIO_CMN_ID_COMUNA" ColumnName="CONDOMINIO_CMN_ID_COMUNA" />
+          <ScalarProperty Name="CONDOMINIO_RG_ID_REGION" ColumnName="CONDOMINIO_RG_ID_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ESPACIO_COMUN">
+      <EntityTypeMapping TypeName="Model_Condominio.ESPACIO_COMUN">
+        <MappingFragment StoreEntitySet="ESPACIO_COMUN">
+          <ScalarProperty Name="EC_ID_ESPACIO" ColumnName="EC_ID_ESPACIO" />
+          <ScalarProperty Name="EC_NOMBRE" ColumnName="EC_NOMBRE" />
+          <ScalarProperty Name="EC_DESCRIPCION" ColumnName="EC_DESCRIPCION" />
+          <ScalarProperty Name="CONDOMINIO_CN_ID_CONDOMINIO" ColumnName="CONDOMINIO_CN_ID_CONDOMINIO" />
+          <ScalarProperty Name="CONDOMINIO_CMN_ID_COMUNA" ColumnName="CONDOMINIO_CMN_ID_COMUNA" />
+          <ScalarProperty Name="CONDOMINIO_RG_ID_REGION" ColumnName="CONDOMINIO_RG_ID_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GASTOS_COMUNES">
+      <EntityTypeMapping TypeName="Model_Condominio.GASTOS_COMUNES">
+        <MappingFragment StoreEntitySet="GASTOS_COMUNES">
+          <ScalarProperty Name="GC_ID_GASTO" ColumnName="GC_ID_GASTO" />
+          <ScalarProperty Name="GC_NOMBRE" ColumnName="GC_NOMBRE" />
+          <ScalarProperty Name="GC_PERIODO" ColumnName="GC_PERIODO" />
+          <ScalarProperty Name="GC_MONTO" ColumnName="GC_MONTO" />
+          <ScalarProperty Name="GC_EMPRESA_SERVICIO" ColumnName="GC_EMPRESA_SERVICIO" />
+          <ScalarProperty Name="DEPARTAMENTO_DPT_ID_DEPTO" ColumnName="DEPARTAMENTO_DPT_ID_DEPTO" />
+          <ScalarProperty Name="GC_TIPO_GASTOCOMUN" ColumnName="GC_TIPO_GASTOCOMUN" />
+          <ScalarProperty Name="GC_OBSERVACION" ColumnName="GC_OBSERVACION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MANTENCION">
+      <EntityTypeMapping TypeName="Model_Condominio.MANTENCION">
+        <MappingFragment StoreEntitySet="MANTENCION">
+          <ScalarProperty Name="MN_ID_MANTENCION" ColumnName="MN_ID_MANTENCION" />
+          <ScalarProperty Name="MN_FECHA_MANTENCION" ColumnName="MN_FECHA_MANTENCION" />
+          <ScalarProperty Name="MN_NOMBRE" ColumnName="MN_NOMBRE" />
+          <ScalarProperty Name="MN_DESCRIPCION" ColumnName="MN_DESCRIPCION" />
+          <ScalarProperty Name="CONDOMINIO_CN_ID_CONDOMINIO" ColumnName="CONDOMINIO_CN_ID_CONDOMINIO" />
+          <ScalarProperty Name="GASTOS_COMUNES_GC_ID_GASTO" ColumnName="GASTOS_COMUNES_GC_ID_GASTO" />
+          <ScalarProperty Name="CONDOMINIO_CMN_ID_COMUNA" ColumnName="CONDOMINIO_CMN_ID_COMUNA" />
+          <ScalarProperty Name="CONDOMINIO_RG_ID_REGION" ColumnName="CONDOMINIO_RG_ID_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PAGO">
+      <EntityTypeMapping TypeName="Model_Condominio.PAGO">
+        <MappingFragment StoreEntitySet="PAGO">
+          <ScalarProperty Name="PG_ID_PAGO" ColumnName="PG_ID_PAGO" />
+          <ScalarProperty Name="PG_FECHA_PAGO" ColumnName="PG_FECHA_PAGO" />
+          <ScalarProperty Name="PG_TIPO_PAGO" ColumnName="PG_TIPO_PAGO" />
+          <ScalarProperty Name="USUARIO_USU_RUT" ColumnName="USUARIO_USU_RUT" />
+          <ScalarProperty Name="PG_OBSERVACION" ColumnName="PG_OBSERVACION" />
+          <ScalarProperty Name="GASTOS_COMUNES_GC_ID_GASTO" ColumnName="GASTOS_COMUNES_GC_ID_GASTO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="REGION">
+      <EntityTypeMapping TypeName="Model_Condominio.REGION">
+        <MappingFragment StoreEntitySet="REGION">
+          <ScalarProperty Name="RG_ID_REGION" ColumnName="RG_ID_REGION" />
+          <ScalarProperty Name="RG_DESCRIPCION" ColumnName="RG_DESCRIPCION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RESERVA">
+      <EntityTypeMapping TypeName="Model_Condominio.RESERVA">
+        <MappingFragment StoreEntitySet="RESERVA">
+          <ScalarProperty Name="RS_ID_RESERVA" ColumnName="RS_ID_RESERVA" />
+          <ScalarProperty Name="RS_FECHA" ColumnName="RS_FECHA" />
+          <ScalarProperty Name="RS_FECHA_RESERVA" ColumnName="RS_FECHA_RESERVA" />
+          <ScalarProperty Name="ESPACIO_COMUN_EC_ID_ESPACIO" ColumnName="ESPACIO_COMUN_EC_ID_ESPACIO" />
+          <ScalarProperty Name="GASTOS_COMUNES_GC_ID_GASTO" ColumnName="GASTOS_COMUNES_GC_ID_GASTO" />
+          <ScalarProperty Name="DEPARTAMENTO_DPT_ID_DEPTO" ColumnName="DEPARTAMENTO_DPT_ID_DEPTO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_DEPARTAMENTO">
+      <EntityTypeMapping TypeName="Model_Condominio.TIPO_DEPARTAMENTO">
+        <MappingFragment StoreEntitySet="TIPO_DEPARTAMENTO">
+          <ScalarProperty Name="TDP_ID_TIPO" ColumnName="TDP_ID_TIPO" />
+          <ScalarProperty Name="TDP_MT2" ColumnName="TDP_MT2" />
+          <ScalarProperty Name="TDP_CANT_HABITACION" ColumnName="TDP_CANT_HABITACION" />
+          <ScalarProperty Name="TDP_CANT_BAÑO" ColumnName="TDP_CANT_BAÑO" />
+          <ScalarProperty Name="TDP_NUM_ESTACIONAMIENTO" ColumnName="TDP_NUM_ESTACIONAMIENTO" />
+          <ScalarProperty Name="TDP_BODEGA" ColumnName="TDP_BODEGA" />
+          <ScalarProperty Name="TDP_METRAJE_BODEGA" ColumnName="TDP_METRAJE_BODEGA" />
+          <ScalarProperty Name="TDP_PORCENTAJE_GC" ColumnName="TDP_PORCENTAJE_GC" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USUARIO">
+      <EntityTypeMapping TypeName="Model_Condominio.USUARIO">
+        <MappingFragment StoreEntitySet="USUARIO">
+          <ScalarProperty Name="USU_RUT" ColumnName="USU_RUT" />
+          <ScalarProperty Name="USU_DV" ColumnName="USU_DV" />
+          <ScalarProperty Name="USU_CONTRASEÑA" ColumnName="USU_CONTRASEÑA" />
+          <ScalarProperty Name="USU_NOMBRE" ColumnName="USU_NOMBRE" />
+          <ScalarProperty Name="USU_APELLIDO" ColumnName="USU_APELLIDO" />
+          <ScalarProperty Name="USU_TELEFONO" ColumnName="USU_TELEFONO" />
+          <ScalarProperty Name="USU_CORREO" ColumnName="USU_CORREO" />
+          <ScalarProperty Name="USU_TIPO_USUARIO" ColumnName="USU_TIPO_USUARIO" />
+          <ScalarProperty Name="DEPARTAMENTO_DPT_ID_DEPTO" ColumnName="DEPARTAMENTO_DPT_ID_DEPTO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

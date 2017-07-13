@@ -1,0 +1,162 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Iniciar Sesion</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sistema de gestión de condominios">
+    <meta name="author" content="Bastian Salazar"> 
+
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link rel="icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link href="@Url.Content("~/Content/css/Sigesco.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/sb-admin-2.css")" rel="stylesheet">
+
+    <style>        
+        ::-webkit-scrollbar {width: 15px;} 
+        ::-webkit-scrollbar-thumb {background-color: rgba(0, 0, 0, 0.2);}
+        ::-webkit-scrollbar-button {background-color: grey;} 
+        ::-webkit-scrollbar-corner {background-color: black;}	    
+    </style>
+    <style>
+        .centrar{
+		            position: absolute;		            
+		            left:15%;
+                    right:15%;
+	            }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+         <!-- Page Heading -->
+         <div class="centrar" style="max-width:500px">
+             <div id="dialogoverlay"></div>
+             <div id="dialogbox">
+                 <div>
+                     <div id="dialogboxhead"></div>
+                     <div id="dialogboxbody"></div>
+                     <div id="dialogboxfoot"></div>
+                 </div>
+             </div>
+             <div class="row">
+                 <div>
+                     <h1 class="page-header"><strong>Bienvenido a SIGESCO</strong> 
+                     </h1>
+                 </div>
+             </div>
+             
+             <div class="center">
+                 <div class="row">
+                     <div class="panel panel-info">
+                         <div class="panel-heading">Para ingresar al sistema debe iniciar sesión
+                         </div>
+                         <div class="panel-body">
+                             <div class="center">
+
+                                 <!--Para que se envíe devuelta al contorller utilizar el atributo "method"-->
+                                 <form role="form"  id="formLogin">
+                                     <div class="form-group">
+                                         <label>Usuario</label>
+                                         <input type="number" min="10000000" class="form-control" placeholder="Mi usuario" name="usuario" id="txtUsuario">
+                                     </div>
+                                     <div class="form-group">
+                                         <label>Contraseña</label>
+                                         <input type="password" class="form-control" placeholder="*******" name="pass" id="pass">
+                                     </div>
+                                     <div>
+                                         <input class="btn btn-primary btn-block"  type="button" onclick="IniciarSesion()" value="Ingresar a mi Cuenta" />
+                                     </div>
+                                 </form>
+                             </div>                           
+                             
+                         </div>
+                     </div>                     
+                 </div>
+                 <hr />
+            <footer>
+               <p>&copy; @DateTime.Now.Year - SIGESCO - Sistema de Gestión de Condominios </p>
+            </footer>
+                 
+             </div>
+             
+         </div>
+     </div>
+    <script src="../Scripts/jquery.min.js"></script>
+    <script src="../Scripts/jquery.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <script src="../Scripts/metisMenu.min.js"></script>
+    <script src="../Scripts/raphael.min.js"></script>
+    <!--<script src="../Scripts/morris.min.js"></script>
+    <script src="../Scripts/morris-data.js"></script>-->
+    <script src="../Scripts/sb-admin-2.js"></script>  
+    <script>
+        function CustomAlert() {
+            this.render = function (dialog) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+                document.getElementById('dialogboxhead').innerHTML = "Información";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+            }
+            this.ok = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Alert = new CustomAlert();
+
+        function IniciarSesion() {
+            var _usuario = $("#txtUsuario").val();
+            var _clave = $("#pass").val();
+            if (_usuario == "" || _usuario.length<8) {
+                Alert.render("Debe ingresar un usuario valido");
+            } else {
+                if (_clave.length <6 || _clave.length > 10) {
+                    Alert.render("Debe ingresar una clave correcta");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("IniciarSesion", "Inicio")',
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: { "Usuario": _usuario, "Clave": _clave },
+                        success: function (respuesta) {
+
+                            if (respuesta.model == '1') {
+                                location.href = "Home/Inicio/";
+                            } else if (respuesta.model == '0')
+                            {
+                                Alert.render('El usuario ingresado no está registrado');
+                            } else if (respuesta.model == '2') {
+                                Alert.render('La clave ingresada es incorrecta');
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            Alert.render('Error: No se pudo cargar método "Validar Usuario"');
+                        }
+                    });
+                }
+            }
+        }//fin function IniciarSesion();
+
+    </script>
+
+</body>
+</html>

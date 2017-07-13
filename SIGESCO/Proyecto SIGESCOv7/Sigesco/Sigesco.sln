@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigesco", "Sigesco\Sigesco.csproj", "{640378EF-9406-4118-842E-5586626E58CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SigescoDAL", "SigescoDAL\SigescoDAL.csproj", "{C3A80230-6044-42F4-8182-83B71D0FCC1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transbank.NET", "..\..\..\webpay-sdk-net-2.0.1\webpay-sdk-net-2.0.1\Transbank.NET\Transbank.NET.csproj", "{82C5D434-F346-4F38-B7A5-EB50078A6FCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{640378EF-9406-4118-842E-5586626E58CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{640378EF-9406-4118-842E-5586626E58CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{640378EF-9406-4118-842E-5586626E58CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{640378EF-9406-4118-842E-5586626E58CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A80230-6044-42F4-8182-83B71D0FCC1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A80230-6044-42F4-8182-83B71D0FCC1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A80230-6044-42F4-8182-83B71D0FCC1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A80230-6044-42F4-8182-83B71D0FCC1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C5D434-F346-4F38-B7A5-EB50078A6FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C5D434-F346-4F38-B7A5-EB50078A6FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C5D434-F346-4F38-B7A5-EB50078A6FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C5D434-F346-4F38-B7A5-EB50078A6FCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

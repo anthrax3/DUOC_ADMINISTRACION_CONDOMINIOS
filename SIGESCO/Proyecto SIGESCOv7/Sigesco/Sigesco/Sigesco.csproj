@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{640378EF-9406-4118-842E-5586626E58CA}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sigesco</RootNamespace>
+    <AssemblyName>Sigesco</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Webpay.Transbank.Library, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\webpay-sdk-net-2.0.1\webpay-sdk-net-2.0.1\libwebpay\Webpay.Transbank.Library.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AnunciosController.cs" />
+    <Compile Include="Controllers\AreasComunesController.cs" />
+    <Compile Include="Controllers\CondominiosController.cs" />
+    <Compile Include="Controllers\EventosController.cs" />
+    <Compile Include="Controllers\GastosComunesController.cs" />
+    <Compile Include="Controllers\InicioController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MultasController.cs" />
+    <Compile Include="Controllers\ReservaController.cs" />
+    <Compile Include="Controllers\ResidentesController.cs" />
+    <Compile Include="Controllers\ServiciosController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UsuarioModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Content\css\bootstrap-social.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\FondoInicio_.jpg" />
+    <Content Include="Content\css\FondoLogin_.jpg" />
+    <Content Include="Content\css\font-awesome.min.css" />
+    <Content Include="Content\css\metisMenu.css" />
+    <Content Include="Content\css\metisMenu.min.css" />
+    <Content Include="Content\css\morris.css" />
+    <Content Include="Content\css\sb-admin-2.css" />
+    <Content Include="Content\css\sb-admin-2.min.css" />
+    <Content Include="Content\favicon\favicon.ico" />
+    <Content Include="Content\css\FondoInicio.jpg" />
+    <Content Include="Content\css\FondoLogin.jpg" />
+    <Content Include="Content\imagenes\casa.jpg" />
+    <Content Include="Content\imagenes\condominio1.jpg" />
+    <Content Include="Content\imagenes\condominio2.jpg" />
+    <Content Include="Content\imagenes\condominio3.jpg" />
+    <Content Include="Content\imagenes\equipo.jpg" />
+    <Content Include="Content\css\Sigesco.css" />
+    <Content Include="Content\imagenes\logo-webpay.png" />
+    <Content Include="Content\imagenes\LogoSigesco.jpg" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\correo.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jspdf.min.js" />
+    <Content Include="Scripts\jspdf.plugin.autotable.js" />
+    <Content Include="Scripts\metisMenu.js" />
+    <Content Include="Scripts\metisMenu.min.js" />
+    <Content Include="Scripts\morris-data.js" />
+    <Content Include="Scripts\morris.js" />
+    <Content Include="Scripts\morris.min.js" />
+    <Content Include="Scripts\raphael.js" />
+    <Content Include="Scripts\raphael.min.js" />
+    <Content Include="Scripts\sb-admin-2.js" />
+    <Content Include="Scripts\sb-admin-2.min.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño1.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Inicio\IniciarSesion.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño2.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Inicio.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\CrearUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\EditarUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\webpay-sdk-net-2.0.1\webpay-sdk-net-2.0.1\Transbank.NET\Transbank.NET.csproj">
+      <Project>{82c5d434-f346-4f38-b7a5-eb50078a6fca}</Project>
+      <Name>Transbank.NET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SigescoDAL\SigescoDAL.csproj">
+      <Project>{c3a80230-6044-42f4-8182-83b71d0fcc1d}</Project>
+      <Name>SigescoDAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\VerUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\VerReservas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\Reservar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\AdmReservas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\VerGastos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\PagarGastos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\Morosidad.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\Observaciones.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\AdmGastos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\MiUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\ConfMiUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerAreas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\AdmAreas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\VerAnuncios.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\AdmAnuncios.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Servicios\ReservarServ.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Eventos\VerEventos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Eventos\AdmEventos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerMultas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\AdmMultas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño3.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\InicioDirectiva.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\MiUsuarioDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\ConfMiUsuarioDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\VerResidentesDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\RegistrarResidentesDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\ResidentesMorososDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\VerGastosDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerAreasDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerReservasDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\VerAnunciosDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\CrearAnunciosDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\IngresarMultasDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagosMultasDir.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño4.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\MiUsuarioCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\ConfMiUsuarioCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\InicioConserje.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\VerResidentesCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\ResidentesMorososCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerAreasCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerReservasCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\VerLibroCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\VerGastosCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\PagarGastosCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\ReservarCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\HabilitarReservarCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\AgregarEventoCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagosMultasResidenteCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagosMultasCons.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño5.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\MiUsuarioAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\ConfMiUsuarioAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\VerResidentesAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\RegistrarResidentesAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Residentes\ResidentesMorososAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\VerGastosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\PagarGastosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerAreasAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\AreasComunes\VerReservasAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\ReservarAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Reserva\HabilitarReservarAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\VerLibroAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\AgregarEventoAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagosMultasResidenteAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Multas\VerPagosMultasAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\VerAnunciosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Anuncios\CrearAnunciosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\InicioAdministrador.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\VerUsuarioAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\GestionaUsuariosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\CrearGastosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\GastosComunes\EditarGastosAdm.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Compartida\_PaginaDiseño6.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Condominios\CrearCondominio.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Condominios\CrearViviendas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Condominios\CrearEspacios.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\InicioSistemas.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\ConfMiUsuarioSis.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\bastian.pubxml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:65224/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

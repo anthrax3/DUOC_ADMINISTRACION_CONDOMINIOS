@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sistema de gestión de condominios">
+    <meta name="author" content="Bastian Salazar">
+
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link rel="icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link href="@Url.Content("~/Content/css/Sigesco.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/font-awesome.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/sb-admin-2.css")" rel="stylesheet">
+
+
+    @RenderSection("head", false)
+</head>
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0">
+
+            <!-- Nav Superior Top Izquierda -->
+            <div class="navbar-header" style="margin-left:2%">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand"><strong>SIGESCO</strong></a>
+            </div>
+            <!-- /.navbar-header -->
+            <!-- Nav Superior Top derecha -->
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- Nav Superior Top derecha -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" href="@Url.Action("Inicio", "Home")">
+                        Inicio
+                        <i class="fa fa-home fa-fw"></i>
+                    </a>
+
+                </li>
+
+                <!-- Nav Superior Top derecha -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">
+                        Mi Sesion
+                        <i class="fa fa-user fa-fw"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="@Url.Action("ConfMiUsuarioSis", "Usuario")"><i class="fa fa-gear fa-fw"></i>Configuración</a>
+                        </li>
+                        <li class="divider"></li>
+                        <!--action name | controller| Texto -->
+                        <li>
+                            <a href="@Url.Action("IniciarSesion", "Inicio")"><i class="fa fa-sign-out fa-fw"></i>Cerrar Sesión</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            <!-- Nav Inquierda -->
+            <div class="navbar-default sidebar" role="navigation">
+
+                <div class="sidebar-nav navbar-collapse" style="margin-left:4%">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-group fa-fw"></i> SUPER ADMINISTRADOR
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse" aria-expanded="False">
+                                <li>
+                                    <a href="@Url.Action("CrearCondominio", "Condominios")">Crear Condominio</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("CrearViviendas", "Condominios")">Ingresar Viviendas</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("CrearEspacios", "Condominios")">Ingresar Espacios</a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+    </div>
+    <!-- /#wrapper -->
+    <!-- Cuerpo -->
+    <div id="page-wrapper">
+
+        <div>
+
+            @RenderBody()
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - SIGESCO - Sistema de Gestión de Condominios </p>
+        </footer>
+
+    </div>
+    <!-- /#page-wrapper -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/metisMenu.min.js"></script>
+    <script src="~/Scripts/raphael.min.js"></script>
+    <!--<script src="../Scripts/morris.min.js"></script>
+    <script src="../Scripts/morris-data.js"></script>-->
+    <script src="~/Scripts/sb-admin-2.js"></script>
+
+
+</body>
+</html>
+

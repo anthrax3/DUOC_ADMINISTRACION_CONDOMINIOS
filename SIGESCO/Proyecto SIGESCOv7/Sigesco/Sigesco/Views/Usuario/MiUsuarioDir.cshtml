@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Mi Usuario";
+    Layout = "~/Views/Compartida/_PaginaDiseño3.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <h3>
+            <strong>MI INFORMACIÓN</strong>
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+        </h3>
+        <hr />
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-info">
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="personal" class="alert alert-info">
+                        <h3>Información Personal</h3>
+                        <hr />
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input id="txtNombre" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Rut</label>
+                            <input id="txtRut" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento</label>
+                            <input id="txtFecha" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Telefono</label>
+                            <input id="txtFono" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>
+                            <input id="txtCorreo" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Sexo</label>
+                            <input id="txtSexo" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div id="usuarioInfo" class="alert alert-info" style="overflow-x: auto;">
+                        <h3>Información de Usuario</h3>
+                        <hr />
+                        <p class="help-block"> Esta es la información de todos los usuarios que usted maneja</p>
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla2">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Tipo de Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo2"></tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+                    </div>                    
+                </div>
+                <!-- .panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+</div>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<script src="~/Scripts/jquery.js"></script>
+<script>
+
+        $(document).ready(function () {
+
+            infoUsuario();
+            infoPersonal();
+
+        });
+        function CustomAlert() {
+            this.render = function (dialog) {
+                var winW = window.innerWidth;
+                var winH = window.innerHeight;
+                var dialogoverlay = document.getElementById('dialogoverlay');
+                var dialogbox = document.getElementById('dialogbox');
+                dialogoverlay.style.display = "block";
+                dialogoverlay.style.height = winH + "px";
+                dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+                dialogbox.style.top = "100px";
+                dialogbox.style.display = "block";
+                document.getElementById('dialogboxhead').innerHTML = "Información";
+                document.getElementById('dialogboxbody').innerHTML = dialog;
+                document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+            }
+            this.ok = function () {
+                document.getElementById('dialogbox').style.display = "none";
+                document.getElementById('dialogoverlay').style.display = "none";
+            }
+        }
+        var Alert = new CustomAlert();
+
+        
+
+    function infoUsuario() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerInfoUsuarioPorUsuario", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+
+                if (respuesta.model != null) {
+                    var celda = respuesta.model.toString().split(";");
+                    $("#txtNombre").val(celda[0] + ' ' + celda[1] + ' ' + celda[2] + ' ' + celda[3]);
+                    var rut = celda[4].toString();
+                    if (!rut || !rut.length || typeof rut !== 'string') {
+                        return -1;
+                    }
+                    var secuencia = [2, 3, 4, 5, 6, 7, 2, 3];
+                    var sum = 0;
+                    for (var i = rut.length - 1; i >= 0; i--) {
+                        var d = rut.charAt(i)
+                        sum += new Number(d) * secuencia[rut.length - (i + 1)];
+                    };
+                    var rest = 11 - (sum % 11);
+                    var dv= rest === 11 ? 0 : rest === 10 ? "K" : rest;
+                    $("#txtRut").val(rut+'-'+dv);
+                    $("#txtFecha").val(celda[5]);
+                    $("#txtFono").val(celda[6]);
+                    $("#txtCorreo").val(celda[7]);
+                    var sexo = celda[8].toString();
+                    if (sexo == 'M') {
+                        $("#txtSexo").val("Masculino");
+                    } else if (sexo == 'F')
+                    {
+                        $("#txtSexo").val("Femenino");
+                    }
+
+                } else {
+                    Alert.render('No se han encontrado datos para cargar');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener información del usuario"');
+            }
+        });
+    }
+
+    function infoPersonal() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerUsuariosPorUsuario", "Usuario")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (respuesta) {
+
+                if (respuesta.model != null) {
+                    $("#cuerpo2").empty()
+                    var filas = respuesta.model.length;
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var tipo;
+                        if (celda[1].toString() == '1'){
+                            tipo = 'Residente';
+                        }
+                        if (celda[1].toString() == '2') {
+                            tipo = 'Directiva Condominio';
+                        }
+                        if (celda[1].toString() == '3') {
+                            tipo = 'Conserje Condominio';
+                        }
+                        if (celda[1].toString() == '4') {
+                            tipo = 'Administrador Condominio';
+                        }
+                        if (celda[1].toString() == '5') {
+                            tipo = 'Mantenimiento Sistemas';
+                        }
+                        var nuevafila = "<tr>" +
+                        "<td>" + celda[0] + "</td>" +
+                        "<td>" + tipo + "</td></tr>"
+                        $("#cuerpo2").append(nuevafila)
+                    }
+                } else {
+                    Alert.render('No se han encontrado datos para cargar');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "ObtenerInfoViviendasPorResidente"');
+            }
+        });
+    }
+
+</script>
+

@@ -1,0 +1,637 @@
+﻿@{
+    ViewBag.Title = "Observaciones";
+    Layout = "~/Views/Compartida/_PaginaDiseño2.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <div class="row">
+        <h3>
+          <strong>VER OBSERVACIONES</strong>  
+        </h3>
+        <hr />
+    </div>
+    <div class="well">
+        <h4>Indique los datos solicitados para visualizar sus gastos</h4>
+        <form class="form-inline">
+            <label for="viviendaSelect">Seleccione su residencia</label>
+            <select id="viviendaSelect" class="form-control">
+                <option>Seleccione</option>
+            </select>
+            <hr />
+            <label for="fechaReserva">Fecha a desde</label>
+            <input type="date" id="fechaDesde" min="2017-01-01" max="2017-01-02" class="form-control" />
+            <label for="fechaReserva">Fecha a hasta</label>
+            <input type="date" id="fechaHasta" min="2017-01-01" max="2017-01-02" class="form-control" />
+            <button type="button" id="btnFiltrar" class="btn btn-primary" onclick="filtrarGastos()">Filtrar Gastos</button>
+        </form>
+    </div>
+    <!-- /.row -->
+    <div class="row" id="tabla_gastos" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Información de Gastos por Rango Consultado
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id=tablaReservas class="alert alert-warning" style="overflow-x: auto;">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Id Gasto</th>
+                                    <th>Nombre de Gasto</th>
+                                    <th>Fecha de Ingreso</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo"></tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <div class="row" id="tabla_observacion" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Gastos con Observaciones
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id=tablaReservas2 class="alert alert-warning" style="overflow-x: auto;" hidden >
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla2">
+                            <thead>
+                                <tr>
+                                    <th>Id Gasto</th>
+                                    <th>Nombre de Gasto</th>
+                                    <th>Fecha de Ingreso</th>
+                                    <th>Monto</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo2"></tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                    <!-- /.panel-body -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" onclick="abrirCrearObservacion()">Añadir Observación</button>
+                        <button type="button" class="btn btn-info" onclick="abrirEditarObservacion()">Editar Observación</button>
+                        <button type="button" class="btn btn-danger" onclick="abrirEliminarObservacion()">Eliminar Observación</button>
+                    </div>
+                </div>                
+            </div>
+            <!-- /.panel -->
+        </div>
+    </div><!--row-->
+    <div class="row" id="panelCrear" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <label for="gastoSelect1">Seleccione Gasto</label>
+                    <select id="gastoSelect1" class="form-control">
+                        <option>Seleccione</option>
+                    </select>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Observación</span>
+                        <textarea class="form-control" id="textoObser1" placeholder="..puede ingresar hasta un maximo de 150 caracteres.." maxlength="150"></textarea>
+                    </div>                    
+                    <!-- /.table-responsive -->
+                    <!-- /.panel-body -->
+                    <div style="text-align:right"><button type="button" class="btn btn-success" onclick="crearObservacion()">Añadir</button></div>
+            </div>
+            <!-- /.panel -->
+        </div>
+    </div><!--row-->
+        </div>
+    <div class="row" id="panelEditar" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <label for="gastoSelect2">Seleccione Gasto</label>
+                    <select id="gastoSelect2" class="form-control" onchange="cargarObservacion()">
+                        <option>Seleccione</option>
+                    </select>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Observación</span>
+                        <textarea class="form-control" id="textoObser2" placeholder="..puede ingresar hasta un maximo de 150 caracteres.." maxlength="150"></textarea>
+                    </div>
+                    <!-- /.table-responsive -->
+                    <!-- /.panel-body -->
+                    <div style="text-align:right"><button type="button" class="btn btn-info" onclick="editarObservacion()">Editar</button></div>
+                </div>
+            </div>
+            <!-- /.panel -->
+        </div>
+    </div><!--row-->
+    <div class="row" id="panelEliminar" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <label for="gastoSelect3">Seleccione Gasto</label>
+                    <select id="gastoSelect3" class="form-control">
+                        <option>Seleccione</option>
+                    </select>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <!-- /.panel-body -->
+                    <div style="text-align:right"><button type="button" class="btn btn-danger" onclick="eliminarObservacion()">Eliminar</button></div>
+                </div>
+            </div>
+            <!-- /.panel -->
+        </div>
+    </div><!--row-->
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        cargarMisViviendas();
+        var fecha_hoy = fechaHoy();
+        document.getElementById("fechaDesde").max = fecha_hoy;
+        document.getElementById("fechaHasta").max = fecha_hoy;
+    });
+
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function fechaHoy() {
+        var fecha = new Date();
+        var anio = fecha.getFullYear();
+        var dia = fecha.getDate();
+        var _mes = fecha.getMonth();
+        _mes = _mes + 1;
+        if (_mes < 10) {
+            var mes = "0" + _mes;
+        }
+        else {
+            var mes = _mes.toString;
+        }
+        return anio + '-' + mes + '-' + dia;
+    }
+
+    function cargarMisViviendas() {
+
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerViviendasPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+
+                if (respuesta.model != "") {
+                    $("#viviendaSelect").empty()
+                    $("#viviendaSelect").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    var filas = respuesta.model.length;
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[2] + " " + celda[1] + " / " + celda[5] + "</option>"
+                        $("#viviendaSelect").append(nuevafila)
+                    }
+                } else {
+                    $('#filtro').hide();
+                    Alert.render('No se han encontrado viviendas para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+    }
+
+    function filtrarGastos() {
+        $("#panelEditar").hide();
+        $("#panelEliminar").hide();
+        $("#panelCrear").hide();
+        $("#tabla_observacion").hide();
+        var desde = $("#fechaDesde").val();
+        var hasta = $("#fechaHasta").val();
+        var vivienda = $('select#viviendaSelect').val();
+
+        if (vivienda == "") {
+            Alert.render('Debe indicar una vivienda a consultar');
+        } else {
+            if (desde == "") {
+                Alert.render('Indique una fecha desde cuando consultar');
+            } else {
+                if (hasta == "") {
+                    Alert.render('Indique una fecha hasta cuando consultar');
+                } else {
+                    if (desde > hasta) {
+                        Alert.render('La fecha desde no puede ser mayor a hasta');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("BuscarGastosPorRangoFechas", "GastosComunes")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Desde": desde, "Hasta": hasta, "Vivienda": vivienda },
+                            success: function (respuesta) {
+                                if (respuesta.model.length != 0) {
+                                    $("#cuerpo").empty()
+                                    $("#cuerpo2").empty()
+                                    var filas = respuesta.model.length;
+
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila = "<tr><td>" +
+                                        celda[5] + "</td><td>" +//id
+                                        celda[0] + "</td><td>" +//nombre
+                                        celda[1] + "</td><td> $" +//fecha
+                                        celda[2] + "</td><td>" +//monto
+                                        celda[3] + "</td></tr>";//estado
+                                        $("#tabla").append(nuevafila);
+                                        var obs=celda[4];
+                                        if(obs!="")
+                                        {
+                                            var nuevafila2 = "<tr><td>" +
+                                                celda[5] + "</td><td>" +
+                                                celda[0] + "</td><td>" +
+                                                celda[1] + "</td><td> $" +
+                                                celda[2] + "</td><td>" +
+                                                celda[4] + "</td></tr>";
+                                            $("#tabla2").append(nuevafila2);
+                                            $("#tablaReservas2").show();
+                                        }
+                                    }
+                                    $("#tabla_gastos").show();
+                                    $("#tabla_observacion").show();
+                                } else {
+                                    Alert.render("No hay datos registrados para la busqueda");
+                                    $("#tabla_gastos").hide();
+                                    $("#tabla_observacion").hide();
+                                }
+
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes por fecha"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+
+    function abrirCrearObservacion() {
+
+        var desde = $("#fechaDesde").val();
+        var hasta = $("#fechaHasta").val();
+        var vivienda = $('select#viviendaSelect').val();
+
+        if (vivienda == "") {
+            Alert.render('Debe indicar una vivienda a consultar');
+        } else {
+            if (desde == "") {
+                Alert.render('Indique una fecha desde cuando consultar');
+            } else {
+                if (hasta == "") {
+                    Alert.render('Indique una fecha hasta cuando consultar');
+                } else {
+                    if (desde > hasta) {
+                        Alert.render('La fecha desde no puede ser mayor a hasta');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("BuscarGastoParaCrearObservacionPorRangoFechas", "GastosComunes")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Desde": desde, "Hasta": hasta, "Vivienda": vivienda },
+                            success: function (respuesta) {
+                                if (respuesta.model != "") {
+                                    $("#textoObser1").empty()
+                                    $("#gastoSelect1").empty()
+                                    $("#gastoSelect1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                                    var filas = respuesta.model.length;
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila =
+                                            "<option value=" + celda[0] + ">" + celda[0] + " - " + celda[1] + " / $" + celda[2] + "</option>"
+                                        $("#gastoSelect1").append(nuevafila)                                        
+                                    }
+                                    $("#panelEditar").hide();
+                                    $("#panelEliminar").hide();
+                                    $("#panelCrear").show();
+                                } else {
+                                    Alert.render("Todos registros filtrados ya poseen una observación");
+                                    $("#panelEditar").hide();
+                                    $("#panelEliminar").hide();
+                                    $("#panelCrear").hide();
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes por fecha"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    function abrirEditarObservacion() {
+        var desde = $("#fechaDesde").val();
+        var hasta = $("#fechaHasta").val();
+        var vivienda = $('select#viviendaSelect').val();
+
+        if (vivienda == "") {
+            Alert.render('Debe indicar una vivienda a consultar');
+        } else {
+            if (desde == "") {
+                Alert.render('Indique una fecha desde cuando consultar');
+            } else {
+                if (hasta == "") {
+                    Alert.render('Indique una fecha hasta cuando consultar');
+                } else {
+                    if (desde > hasta) {
+                        Alert.render('La fecha desde no puede ser mayor a hasta');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("BuscarGastoParaEditarObservacionPorRangoFechas", "GastosComunes")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Desde": desde, "Hasta": hasta, "Vivienda": vivienda },
+                            success: function (respuesta) {
+                                if (respuesta.model != "") {
+                                    $("#gastoSelect2").empty()
+                                    $("#gastoSelect2").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                                    var filas = respuesta.model.length;
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila =
+                                            "<option value=" + celda[0] + ">" + celda[0] + " - " + celda[1] + " / $" + celda[2] + "</option>"
+                                        $("#gastoSelect2").append(nuevafila)
+                                    }
+                                    $('#panelEliminar').hide();
+                                    $('#panelCrear').hide();
+                                    $('#panelEditar').show();
+                                } else {
+                                    Alert.render("Todos registros filtrados no poseen una observación");
+                                    $('#panelEditar').hide();
+                                    $('#panelEliminar').hide();
+                                    $('#panelCrear').hide();
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes por fecha"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    function cargarObservacion()
+    {
+        var gasto = $('select#gastoSelect2').val();
+
+        if(gasto =="")
+        {
+            Alert.render("Debe seleccionar un gasto para cargar su observación");
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerObervacionPorGasto", "GastosComunes")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Gasto": gasto },
+                success: function (respuesta) {
+                    $("#textoObser2").empty()
+                    if (respuesta.model != "") {
+                        $("#textoObser2").append(respuesta.model);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error al cargar el metodo del controlador:"Obtener observación por gasto"');
+                }
+            });
+        }
+
+    }
+
+    function abrirEliminarObservacion() {
+        var desde = $("#fechaDesde").val();
+        var hasta = $("#fechaHasta").val();
+        var vivienda = $('select#viviendaSelect').val();
+
+        if (vivienda == "") {
+            Alert.render('Debe indicar una vivienda a consultar');
+        } else {
+            if (desde == "") {
+                Alert.render('Indique una fecha desde cuando consultar');
+            } else {
+                if (hasta == "") {
+                    Alert.render('Indique una fecha hasta cuando consultar');
+                } else {
+                    if (desde > hasta) {
+                        Alert.render('La fecha desde no puede ser mayor a hasta');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("BuscarGastoParaEditarObservacionPorRangoFechas", "GastosComunes")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Desde": desde, "Hasta": hasta, "Vivienda": vivienda },
+                            success: function (respuesta) {
+                                if (respuesta.model != "") {
+                                    $("#gastoSelect3").empty()
+                                    $("#gastoSelect3").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                                    var filas = respuesta.model.length;
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila =
+                                            "<option value=" + celda[0] + ">" + celda[0] + " - " + celda[1] + " / $" + celda[2] + "</option>"
+                                        $("#gastoSelect3").append(nuevafila)                                       
+                                    }
+                                    $("#panelEditar").hide();
+                                    $("#panelCrear").hide();
+                                    $("#panelEliminar").show();
+                                } else {
+                                    Alert.render("Todos registros filtrados no poseen una observación");
+                                    $("#panelEditar").hide();
+                                    $("#panelEliminar").hide();
+                                    $("#panelCrear").hide();
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes por fecha"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+    }
+
+    function crearObservacion() {
+
+        var gasto = $('select#gastoSelect1').val();
+        var texto = $('#textoObser1').val();
+
+        if(gasto =="")
+        {
+            Alert.render("Debe seleccionar un gasto para cargar su observación");
+        } else {
+            if (texto.length <3) {
+                Alert.render("Debe ingresar texto en la observación de la menos 3 caracteres");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AgragarObervacionPorGasto", "GastosComunes")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Gasto": gasto, "Texto": texto },
+                    success: function (respuesta) {
+
+                        if (respuesta.model==true) {
+                            Alert.render('La observación se ha agregado correctamente');
+                            $("#panelEditar").hide();
+                            $("#panelEliminar").hide();
+                            $("#panelCrear").hide();
+                            $("#textoObser1").empty()
+                            filtrarGastos();
+                        }else
+                        {
+                            Alert.render('No se ha conseguido agregar la observación');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error al cargar el metodo del controlador:"Añadir observación"');
+                    }
+                });
+            }
+        }
+
+    }
+
+    function editarObservacion(){
+        var gasto = $('select#gastoSelect2').val();
+        var texto = $('#textoObser2').val();
+
+        if (gasto == "") {
+            Alert.render("Debe seleccionar un gasto para cargar su observación");
+        } else {
+            if (texto.length < 3) {
+                Alert.render("Debe ingresar texto en la observación de la menos 3 caracteres");
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AgragarObervacionPorGasto", "GastosComunes")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Gasto": gasto, "Texto": texto },
+                    success: function (respuesta) {
+
+                        if (respuesta.model == true) {
+                            Alert.render('La observación se ha agregado correctamente');
+                            $("#panelEditar").hide();
+                            $("#panelEliminar").hide();
+                            $("#panelCrear").hide();
+                            $("#textoObser2").empty()
+                            filtrarGastos();
+                        } else {
+                            Alert.render('No se ha conseguido actualizar la observación');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error al cargar el metodo del controlador:"Actualizar observación"');
+                    }
+                });
+            }
+        }
+
+    }
+
+    function eliminarObservacion(){
+        var gasto = $('select#gastoSelect3').val();
+
+        if (gasto == "") {
+            Alert.render("Debe seleccionar un gasto para cargar su observación");
+        } else {
+            
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EliminarObervacionPorGasto", "GastosComunes")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Gasto": gasto },
+                    success: function (respuesta) {
+
+                        if (respuesta.model == true) {
+                            Alert.render('La observación se ha eliminado correctamente');
+                            $("#panelEditar").hide();
+                            $("#panelEliminar").hide();
+                            $("#panelCrear").hide();
+                            filtrarGastos();
+                        } else {
+                            Alert.render('No se ha conseguido eliminar la observación');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error al cargar el metodo del controlador:"Eliminar observación"');
+                    }
+                });
+        }
+    }
+</script>

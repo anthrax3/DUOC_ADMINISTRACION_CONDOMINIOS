@@ -1,0 +1,404 @@
+﻿@{
+    ViewBag.Title = "Editar Gastos";
+    Layout = "~/Views/Compartida/_PaginaDiseño5.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <div class="row">
+        <h3>
+            <strong>EDITAR GASTOS COMUNES</strong>
+        </h3>
+        <hr />
+    </div>
+    <div class="well">
+        <h4>Indique los datos solicitados para visualizar los gastos y poder editarlos</h4>
+        <form class="form-inline">
+            <label for="selectCondominio">Condominio</label>
+            <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio" onchange="filtrarViviendas()"></select>
+            <label for="selectResidencia1">Residencias</label>
+            <select class="form-control" name="selectResidencia1" id="selectResidencia1">
+                <option value="">Seleccione</option>
+            </select>
+            <hr />
+            <label for="fechaReserva">Fecha a desde</label>
+            <input type="date" id="fechaDesde" min="2017-01-01" max="2017-01-02" class="form-control" />
+            <label for="fechaReserva">Fecha a hasta</label>
+            <input type="date" id="fechaHasta" min="2017-01-01" max="2017-01-02" class="form-control" />
+            <button type="button" id="btnFiltrar" class="btn btn-primary" onclick="filtrarGastos()">Filtrar Gastos</button>
+        </form>
+    </div>
+    <!-- /.row -->
+    <div class="row" id="tabla_gastos" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Información de Gastosr
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id=tablaReservas class="alert alert-warning" style="overflow-x: auto;">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Seleccione</th>
+                                    <th>Nombre de Gasto</th>
+                                    <th>Descripcion</th>
+                                    <th>Fecha de Ingreso</th>
+                                    <th>Monto</th>
+                                    <th>Observación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo"></tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.row -->
+        <br />
+    </div>
+    <div class="row" id="tabla_pagar" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    Editar Campos
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id=tablaPagos class="alert alert-warning" style="overflow-x: auto;">
+                        <div id="personal" class="alert alert-warning">
+                            <div class="form-group">
+                                <label>ID Gasto</label>**
+                                <input type="text" id="txtId" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre Gasto</label>**
+                                <input type="text" id="txtNombre" class="form-control" maxlength="30" placeholder="máximo 30 carcateres">
+                            </div>
+                            <div class="form-group">
+                                <label>Descripción</label>**
+                                <textarea class="form-control" id="txtDescripcion" maxlength="100" placeholder="máximo 100 caracteres"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Gasto</label>**
+                                <select id="txtTipo" class="form-control">
+                                    <option value="">Seleccione</option>
+                                    <option value="1">Mantenimiento del Condominio</option>
+                                    <option value="2">Administracion del Condominio</option>
+                                    <option value="3">Reserva Espacio Común</option>
+                                    <option value="4">Multa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Monto</label>**
+                                <input id="txtMonto" type="number" placeholder="10000" class="form-control">
+                            </div>
+                            <div id="btnPagar">
+                                <button type="button" id="pay-button" class="btn btn-danger btn-lg" onclick="editarCampos()"><strong>CONFIRMAR CAMBIOS</strong></button>
+                            </div>
+                        </div>                  
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.row -->
+        
+    </div>
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script src="~/Scripts/jspdf.min.js"></script>
+<script src="~/Scripts/jspdf.plugin.autotable.js"></script>
+<script>
+
+    $(document).ready(function () {
+        cargarMisCondominios();
+        var fecha_hoy = fechaHoy();
+        document.getElementById("fechaDesde").max = fecha_hoy;
+        document.getElementById("fechaHasta").max = fecha_hoy;
+    }); var domicilioVivienda = "";
+    var nombreCondominio = "";
+
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function fechaHoy() {
+        var fecha = new Date();
+        var anio = fecha.getFullYear();
+        var dia = fecha.getDate();
+        var _mes = fecha.getMonth();
+        _mes = _mes + 1;
+        if (_mes < 10) {
+            var mes = "0" + _mes;
+        }
+        else {
+            var mes = _mes.toString;
+        }
+        return anio + '-' + mes + '-' + dia;
+    }
+
+    function cargarMisCondominios() {
+        $("#panelReservar").hide();
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+    }
+
+    function filtrarViviendas() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "") {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia1").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Planta ' + celda[3] + "</option>"
+                            $("#selectResidencia1").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                        $("#selectResidencia1").empty()
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    function filtrarGastos() {
+        var desde = $("#fechaDesde").val();
+        var hasta = $("#fechaHasta").val();
+        var vivienda = $('select#selectResidencia1').val();
+        var combo = document.getElementById("selectResidencia1");
+        var selected = combo.options[combo.selectedIndex].text;
+        var combo1 = document.getElementById("selectCondominio");
+        var selected1 = combo1.options[combo.selectedIndex].text;
+        domicilioVivienda = selected;
+        nombreCondominio = selected1;
+
+        $("#tabla_pagar").hide();
+        if (vivienda == "") {
+            Alert.render('Debe indicar una vivienda a consultar');
+        } else {
+            if (desde == "") {
+                Alert.render('Indique una fecha desde cuando consultar');
+            } else {
+                if (hasta == "") {
+                    Alert.render('Indique una fecha hasta cuando consultar');
+                } else {
+                    if (desde > hasta) {
+                        Alert.render('La fecha desde no puede ser mayor a hasta');
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("BuscarGastosPorPagarPorRangoFechas", "GastosComunes")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Desde": desde, "Hasta": hasta, "Vivienda": vivienda },
+                            success: function (respuesta) {
+                                if (respuesta.model.length != 0) {
+                                    $("#cuerpo").empty()
+                                    var filas = respuesta.model.length;
+
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila = "<tr><td>" +
+                                        '<input name="idGasto" type="radio" value="' + celda[5] + '" onClick="cargarDatos()"></td><td>' +
+                                        celda[0] + "</td><td>" +
+                                        celda[1] + "</td><td>" +
+                                        celda[2] + '</td><td> $' +
+                                        celda[3] + "</td><td>" +
+                                        celda[4] + "</td></tr>"
+
+                                        $("#tabla").append(nuevafila)
+                                    }
+                                    $("#tabla_gastos").show();
+                                } else {
+                                    Alert.render("No hay datos registrados para la busqueda");
+                                }
+
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes impagos por fecha"');
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    function cargarDatos()
+    {
+        var idGasto = $("input[name=idGasto]:checked").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetGastoPorID", "GastosComunes")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "IdGasto": idGasto },
+            success: function (respuesta) {
+                if (respuesta.model != null) {
+                   
+                         var fila = respuesta.model;
+                        var celda = fila.toString().split("{"); 
+                        $("#txtId").val(celda[0]);
+                        $("#txtNombre").val(celda[1]);
+                        $("#txtDescripcion").val(celda[2]);
+                        $("#txtMonto").val(celda[4]);
+                        $('#txtTipo').val(celda[3]).attr('selected', 'selected');
+                        $("#tabla_pagar").show();
+                } else {
+                    Alert.render("No hay datos registrados para la busqueda");
+                }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error al cargar el metodo del controlador:"Filtrar gastos comunes impagos por fecha"');
+            }
+        });        
+    }
+
+    function editarCampos()
+    {
+        var id=$("#txtId").val();
+        var nombre = $("#txtNombre").val();
+        var descripcion=  $("#txtDescripcion").val();
+       var tipo = $("#txtTipo").val();
+       var monto = $("#txtMonto").val();
+
+       if (nombre.length < 5) {
+           Alert.render("Ingrese un nombre válido");
+       } else {
+           if (descripcion.length < 5) {
+               Alert.render("Ingrese una descripción válido");
+           } else {
+                   if (tipo == "") {
+                       Alert.render("Seleccione un tipo");
+                   } else {
+                       if (monto == "") {
+                           Alert.render("Ingrese un monto");
+                       } else {
+
+                               $.ajax({
+                                   type: "POST",
+                                   url: '@Url.Action("UpdateGastoPorID", "GastosComunes")',
+                                   content: "application/json; charset=utf-8",
+                                   dataType: "json",
+                                   data: { "ID": id,"Nombre": nombre, "Descripcion": descripcion, "Tipo": tipo, "Monto": monto},
+                                   success: function (respuesta) {
+                                       if (respuesta.model) {
+                                           
+                                           Alert.render("Los gastos se actualizaron satisfactoriamente");
+                                           $("#tabla_pagar").hide();
+                                           $("#txtId").val("");
+                                           $("#txtNombre").val("");
+                                           $("#txtDescripcion").val("");
+                                           $("#txtTipo").val("");
+                                           $("#txtMonto").val("");
+                                           filtrarGastos();
+
+                                       } else {
+                                           Alert.render("No se han ingresado los gastos");
+                                       }
+                                   },
+                                   error: function (xhr, textStatus, errorThrown) {
+                                       Alert.render('Error: No se pudo cargar método "Generar gastos"');
+                                   }
+                               });
+
+                           }
+                       } 
+                   }
+               }
+           }
+       
+   
+    
+    
+
+</script>
+

@@ -1,0 +1,180 @@
+﻿@{
+    ViewBag.Title = "Crear Anuncios";
+    Layout = "~/Views/Compartida/_PaginaDiseño3.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <h3>
+            <strong>CREAR ANUNCIOS</strong>
+        </h3>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-lg-12">            
+            <div class="panel panel-info" id="panelCrear">
+                <div class="panel-heading">
+                    <form class="form-group">
+                        <label for="selectCondominio">Condominio</label>
+                        <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </form>
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="personal" class="alert alert-info">
+                        <div class="form-group">
+                            <label>Título</label>**
+                            <input type="text" id="txtTitu" class="form-control" maxlength="30" placeholder="..máximo 30 caracteres">
+                            <label>Texto del Anuncio </label>**
+                            <textarea type="text" id="txtCuerpo" style="min-height:150px" class="form-control" maxlength="480" placeholder="..máximo 480 caracteres.."></textarea>
+                            <div class="form-group">
+                                <label for="txtRemi">Quién emite el Anuncio</label>**
+                                <select id="txtRemi" class="form-control">
+                                    <option value="La Directiva">La Directiva</option>
+                                    <option value="Conserjeria">Conserjeria</option>
+                                </select>
+                            </div>
+                            <br />
+                            <p class="help-block">La fecha de emición se guarda automáticamente al momento de registrar el Anuncio</p>
+                        </div>                        
+                    </div>
+                    <div class="btn-group" data-toggle="buttons">
+                        <input type="button" class="btn btn-primary" onclick="crearAnuncio()" value="Crear Anuncio">
+                    </div>
+                </div>                
+            </div>
+            <!-- /.panel -->
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        cargarMisCondominios();
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function cargarMisCondominios() {
+        $("#panelReservar").hide();
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+    }
+
+    function crearAnuncio() {
+        var titulo = $("#txtTitu").val();
+        var cuerpo = $("#txtCuerpo").val();
+        var remitente = $("#txtRemi").val();
+        var condominio = $('select#selectCondominio').val();
+
+        if(titulo=="")
+        {
+            Alert.render('Debe indicar un Título');
+        }else
+        {
+            if(titulo.length>30)
+            {
+                Alert.render('El título no puede exceder los 30 caracteres');
+            } else {
+                if (cuerpo =="") {
+                    Alert.render('Debe ingresar un texto al anuncio');
+                } else {
+                    if (cuerpo.length > 480) {
+                        Alert.render('El texto no puede superar los 480 caracteres');
+                    } else {
+                        if(condominio=="")
+                        { Alert.render('Debe seleccionar un Condominio'); }
+                else
+                {
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("CrearAnuncios", "Anuncios")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            data: { "Titulo": titulo,"Cuerpo":cuerpo,"Remitente":remitente,"Condominio":condominio },
+                            success: function (respuesta) {
+                                Alert.render('El anuncio se ha creado correctamente');
+                                $("#txtTitu").val("");
+                                $("#txtCuerpo").val("");
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error: No se pudo cargar método "Crear anuncio"');
+                            }
+                        });
+                }
+                    }
+                }
+            }
+        }
+    }
+    
+
+</script>
+

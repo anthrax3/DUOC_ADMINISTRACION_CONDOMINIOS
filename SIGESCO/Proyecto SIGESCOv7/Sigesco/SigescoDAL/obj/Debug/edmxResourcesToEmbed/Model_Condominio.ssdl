@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model_Condominio.Store" Alias="Self" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="Model_CondominioStoreContainer">
+    <EntitySet Name="ADMINISTRADOR" EntityType="Model_Condominio.Store.ADMINISTRADOR" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="COMUNA" EntityType="Model_Condominio.Store.COMUNA" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="CONDOMINIO" EntityType="Model_Condominio.Store.CONDOMINIO" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="DEPARTAMENTO" EntityType="Model_Condominio.Store.DEPARTAMENTO" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="ESPACIO_COMUN" EntityType="Model_Condominio.Store.ESPACIO_COMUN" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="GASTOS_COMUNES" EntityType="Model_Condominio.Store.GASTOS_COMUNES" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="MANTENCION" EntityType="Model_Condominio.Store.MANTENCION" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="PAGO" EntityType="Model_Condominio.Store.PAGO" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="REGION" EntityType="Model_Condominio.Store.REGION" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="RESERVA" EntityType="Model_Condominio.Store.RESERVA" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="TIPO_DEPARTAMENTO" EntityType="Model_Condominio.Store.TIPO_DEPARTAMENTO" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="USUARIO" EntityType="Model_Condominio.Store.USUARIO" store:Type="Tables" Schema="BASTIAN" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <AssociationSet Name="COMUNA_REGION_FK" Association="Model_Condominio.Store.COMUNA_REGION_FK">
+      <End Role="REGION" EntitySet="REGION" />
+      <End Role="COMUNA" EntitySet="COMUNA" />
+    </AssociationSet>
+    <AssociationSet Name="CONDOMINIO_ADMINISTRADOR_FK" Association="Model_Condominio.Store.CONDOMINIO_ADMINISTRADOR_FK">
+      <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
+      <End Role="CONDOMINIO" EntitySet="CONDOMINIO" />
+    </AssociationSet>
+    <AssociationSet Name="CONDOMINIO_COMUNA_FK" Association="Model_Condominio.Store.CONDOMINIO_COMUNA_FK">
+      <End Role="COMUNA" EntitySet="COMUNA" />
+      <End Role="CONDOMINIO" EntitySet="CONDOMINIO" />
+    </AssociationSet>
+    <AssociationSet Name="DEPARTAMENTO_CONDOMINIO_FK" Association="Model_Condominio.Store.DEPARTAMENTO_CONDOMINIO_FK">
+      <End Role="CONDOMINIO" EntitySet="CONDOMINIO" />
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTO" />
+    </AssociationSet>
+    <AssociationSet Name="ESPACIO_COMUN_CONDOMINIO_FK" Association="Model_Condominio.Store.ESPACIO_COMUN_CONDOMINIO_FK">
+      <End Role="CONDOMINIO" EntitySet="CONDOMINIO" />
+      <End Role="ESPACIO_COMUN" EntitySet="ESPACIO_COMUN" />
+    </AssociationSet>
+    <AssociationSet Name="GASTOS_COMUNES_DEPARTAMENTO_FK" Association="Model_Condominio.Store.GASTOS_COMUNES_DEPARTAMENTO_FK">
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTO" />
+      <End Role="GASTOS_COMUNES" EntitySet="GASTOS_COMUNES" />
+    </AssociationSet>
+    <AssociationSet Name="MANTENCION_CONDOMINIO_FK" Association="Model_Condominio.Store.MANTENCION_CONDOMINIO_FK">
+      <End Role="CONDOMINIO" EntitySet="CONDOMINIO" />
+      <End Role="MANTENCION" EntitySet="MANTENCION" />
+    </AssociationSet>
+    <AssociationSet Name="MANTENCION_GASTOS_COMUNES_FK" Association="Model_Condominio.Store.MANTENCION_GASTOS_COMUNES_FK">
+      <End Role="GASTOS_COMUNES" EntitySet="GASTOS_COMUNES" />
+      <End Role="MANTENCION" EntitySet="MANTENCION" />
+    </AssociationSet>
+    <AssociationSet Name="PAGO_GASTOS_COMUNES_FK" Association="Model_Condominio.Store.PAGO_GASTOS_COMUNES_FK">
+      <End Role="GASTOS_COMUNES" EntitySet="GASTOS_COMUNES" />
+      <End Role="PAGO" EntitySet="PAGO" />
+    </AssociationSet>
+    <AssociationSet Name="PAGO_USUARIO_FK" Association="Model_Condominio.Store.PAGO_USUARIO_FK">
+      <End Role="USUARIO" EntitySet="USUARIO" />
+      <End Role="PAGO" EntitySet="PAGO" />
+    </AssociationSet>
+    <AssociationSet Name="RESERVA_DEPARTAMENTO_FK" Association="Model_Condominio.Store.RESERVA_DEPARTAMENTO_FK">
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTO" />
+      <End Role="RESERVA" EntitySet="RESERVA" />
+    </AssociationSet>
+    <AssociationSet Name="RESERVA_ESPACIO_COMUN_FK" Association="Model_Condominio.Store.RESERVA_ESPACIO_COMUN_FK">
+      <End Role="ESPACIO_COMUN" EntitySet="ESPACIO_COMUN" />
+      <End Role="RESERVA" EntitySet="RESERVA" />
+    </AssociationSet>
+    <AssociationSet Name="RESERVA_GASTOS_COMUNES_FK" Association="Model_Condominio.Store.RESERVA_GASTOS_COMUNES_FK">
+      <End Role="GASTOS_COMUNES" EntitySet="GASTOS_COMUNES" />
+      <End Role="RESERVA" EntitySet="RESERVA" />
+    </AssociationSet>
+    <AssociationSet Name="USUARIO_DEPARTAMENTO_FK" Association="Model_Condominio.Store.USUARIO_DEPARTAMENTO_FK">
+      <End Role="DEPARTAMENTO" EntitySet="DEPARTAMENTO" />
+      <End Role="USUARIO" EntitySet="USUARIO" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ADMINISTRADOR">
+    <Key>
+      <PropertyRef Name="ADM_RUT" />
+    </Key>
+    <Property Name="ADM_RUT" Type="number" Nullable="false" Precision="8" />
+    <Property Name="ADM_DV" Type="nchar" Nullable="false" MaxLength="1" />
+    <Property Name="ADM_RAZON_SOCIAL" Type="varchar2" Nullable="false" MaxLength="30" />
+    <Property Name="ADM_DIRECCION" Type="varchar2" Nullable="false" MaxLength="40" />
+    <Property Name="ADM_TELEFONO" Type="number" Precision="11" />
+    <Property Name="ADM_CORREO" Type="varchar2" Nullable="false" MaxLength="40" />
+  </EntityType>
+  <EntityType Name="COMUNA">
+    <Key>
+      <PropertyRef Name="CMN_ID_COMUNA" />
+      <PropertyRef Name="REGION_RG_ID_REGION" />
+    </Key>
+    <Property Name="CMN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="CMN_DESCRIPCION" Type="varchar2" Nullable="false" MaxLength="35" />
+    <Property Name="REGION_RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+  </EntityType>
+  <EntityType Name="CONDOMINIO">
+    <Key>
+      <PropertyRef Name="CN_ID_CONDOMINIO" />
+      <PropertyRef Name="COMUNA_CMN_ID_COMUNA" />
+      <PropertyRef Name="COMUNA_RG_ID_REGION" />
+    </Key>
+    <Property Name="CN_ID_CONDOMINIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="CN_NOMBRE" Type="varchar2" Nullable="false" MaxLength="35" />
+    <Property Name="CN_DIRECCION" Type="varchar2" Nullable="false" MaxLength="40" />
+    <Property Name="CN_CANTIDAD_DEPTO" Type="number" Nullable="false" Precision="3" />
+    <Property Name="ADMINISTRADOR_ADM_RUT" Type="number" Nullable="false" Precision="8" />
+    <Property Name="CN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="COMUNA_CMN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="COMUNA_RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+  </EntityType>
+  <EntityType Name="DEPARTAMENTO">
+    <Key>
+      <PropertyRef Name="DPT_ID_DEPTO" />
+    </Key>
+    <Property Name="DPT_ID_DEPTO" Type="number" Nullable="false" Precision="9" />
+    <Property Name="DPT_NUMERO" Type="varchar2" Nullable="false" MaxLength="6" />
+    <Property Name="TIPO_DEPARTAMENTO_TDP_ID_TIPO" Type="number" Nullable="false" Precision="3" />
+    <Property Name="CONDOMINIO_CN_ID_CONDOMINIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="DPT_SEGURO" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="DPT_MONTO_SEGURO" Type="number" Precision="7" />
+    <Property Name="CONDOMINIO_CMN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="CONDOMINIO_RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+  </EntityType>
+  <EntityType Name="ESPACIO_COMUN">
+    <Key>
+      <PropertyRef Name="EC_ID_ESPACIO" />
+    </Key>
+    <Property Name="EC_ID_ESPACIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="EC_NOMBRE" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="EC_DESCRIPCION" Type="varchar2" Nullable="false" MaxLength="45" />
+    <Property Name="CONDOMINIO_CN_ID_CONDOMINIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="CONDOMINIO_CMN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="CONDOMINIO_RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+  </EntityType>
+  <EntityType Name="GASTOS_COMUNES">
+    <Key>
+      <PropertyRef Name="GC_ID_GASTO" />
+    </Key>
+    <Property Name="GC_ID_GASTO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="GC_NOMBRE" Type="varchar2" Nullable="false" MaxLength="40" />
+    <Property Name="GC_PERIODO" Type="varchar2" Nullable="false" MaxLength="15" />
+    <Property Name="GC_MONTO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="GC_EMPRESA_SERVICIO" Type="varchar2" Nullable="false" MaxLength="45" />
+    <Property Name="DEPARTAMENTO_DPT_ID_DEPTO" Type="number" Nullable="false" Precision="9" />
+    <Property Name="GC_TIPO_GASTOCOMUN" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="GC_OBSERVACION" Type="varchar2" MaxLength="40" />
+  </EntityType>
+  <EntityType Name="MANTENCION">
+    <Key>
+      <PropertyRef Name="MN_ID_MANTENCION" />
+    </Key>
+    <Property Name="MN_ID_MANTENCION" Type="number" Nullable="false" Precision="8" />
+    <Property Name="MN_FECHA_MANTENCION" Type="date" Nullable="false" />
+    <Property Name="MN_NOMBRE" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="MN_DESCRIPCION" Type="varchar2" Nullable="false" MaxLength="50" />
+    <Property Name="CONDOMINIO_CN_ID_CONDOMINIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="GASTOS_COMUNES_GC_ID_GASTO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="CONDOMINIO_CMN_ID_COMUNA" Type="number" Nullable="false" Precision="3" />
+    <Property Name="CONDOMINIO_RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+  </EntityType>
+  <EntityType Name="PAGO">
+    <Key>
+      <PropertyRef Name="PG_ID_PAGO" />
+    </Key>
+    <Property Name="PG_ID_PAGO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="PG_FECHA_PAGO" Type="date" Nullable="false" />
+    <Property Name="PG_TIPO_PAGO" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="USUARIO_USU_RUT" Type="number" Nullable="false" Precision="8" />
+    <Property Name="PG_OBSERVACION" Type="varchar2" MaxLength="60" />
+    <Property Name="GASTOS_COMUNES_GC_ID_GASTO" Type="number" Nullable="false" Precision="8" />
+  </EntityType>
+  <EntityType Name="REGION">
+    <Key>
+      <PropertyRef Name="RG_ID_REGION" />
+    </Key>
+    <Property Name="RG_ID_REGION" Type="number" Nullable="false" Precision="2" />
+    <Property Name="RG_DESCRIPCION" Type="varchar2" Nullable="false" MaxLength="35" />
+  </EntityType>
+  <EntityType Name="RESERVA">
+    <Key>
+      <PropertyRef Name="RS_ID_RESERVA" />
+      <PropertyRef Name="DEPARTAMENTO_DPT_ID_DEPTO" />
+    </Key>
+    <Property Name="RS_ID_RESERVA" Type="number" Nullable="false" Precision="9" />
+    <Property Name="RS_FECHA" Type="date" Nullable="false" />
+    <Property Name="RS_FECHA_RESERVA" Type="date" Nullable="false" />
+    <Property Name="ESPACIO_COMUN_EC_ID_ESPACIO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="GASTOS_COMUNES_GC_ID_GASTO" Type="number" Nullable="false" Precision="8" />
+    <Property Name="DEPARTAMENTO_DPT_ID_DEPTO" Type="number" Nullable="false" Precision="9" />
+  </EntityType>
+  <EntityType Name="TIPO_DEPARTAMENTO">
+    <Key>
+      <PropertyRef Name="TDP_ID_TIPO" />
+    </Key>
+    <Property Name="TDP_ID_TIPO" Type="number" Nullable="false" Precision="3" />
+    <Property Name="TDP_MT2" Type="number" Nullable="false" Precision="4" />
+    <Property Name="TDP_CANT_HABITACION" Type="number" Nullable="false" Precision="2" />
+    <Property Name="TDP_CANT_BAÑO" Type="number" Nullable="false" Precision="2" />
+    <Property Name="TDP_NUM_ESTACIONAMIENTO" Type="number" Nullable="false" Precision="2" />
+    <Property Name="TDP_BODEGA" Type="char" Nullable="false" MaxLength="1" />
+    <Property Name="TDP_METRAJE_BODEGA" Type="number" Precision="4" Scale="2" />
+    <Property Name="TDP_PORCENTAJE_GC" Type="number" Nullable="false" Precision="4" Scale="2" />
+  </EntityType>
+  <EntityType Name="USUARIO">
+    <Key>
+      <PropertyRef Name="USU_RUT" />
+    </Key>
+    <Property Name="USU_RUT" Type="number" Nullable="false" Precision="8" />
+    <Property Name="USU_DV" Type="nchar" Nullable="false" MaxLength="1" />
+    <Property Name="USU_CONTRASEÑA" Type="varchar2" Nullable="false" MaxLength="10" />
+    <Property Name="USU_NOMBRE" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="USU_APELLIDO" Type="varchar2" Nullable="false" MaxLength="25" />
+    <Property Name="USU_TELEFONO" Type="number" Precision="11" />
+    <Property Name="USU_CORREO" Type="varchar2" Nullable="false" MaxLength="35" />
+    <Property Name="USU_TIPO_USUARIO" Type="varchar2" Nullable="false" MaxLength="15" />
+    <Property Name="DEPARTAMENTO_DPT_ID_DEPTO" Type="number" Nullable="false" Precision="9" />
+  </EntityType>
+  <Association Name="COMUNA_REGION_FK">
+    <End Role="REGION" Type="Model_Condominio.Store.REGION" Multiplicity="1" />
+    <End Role="COMUNA" Type="Model_Condominio.Store.COMUNA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="REGION">
+        <PropertyRef Name="RG_ID_REGION" />
+      </Principal>
+      <Dependent Role="COMUNA">
+        <PropertyRef Name="REGION_RG_ID_REGION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CONDOMINIO_ADMINISTRADOR_FK">
+    <End Role="ADMINISTRADOR" Type="Model_Condominio.Store.ADMINISTRADOR" Multiplicity="1" />
+    <End Role="CONDOMINIO" Type="Model_Condominio.Store.CONDOMINIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ADMINISTRADOR">
+        <PropertyRef Name="ADM_RUT" />
+      </Principal>
+      <Dependent Role="CONDOMINIO">
+        <PropertyRef Name="ADMINISTRADOR_ADM_RUT" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CONDOMINIO_COMUNA_FK">
+    <End Role="COMUNA" Type="Model_Condominio.Store.COMUNA" Multiplicity="1" />
+    <End Role="CONDOMINIO" Type="Model_Condominio.Store.CONDOMINIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMUNA">
+        <PropertyRef Name="CMN_ID_COMUNA" />
+        <PropertyRef Name="REGION_RG_ID_REGION" />
+      </Principal>
+      <Dependent Role="CONDOMINIO">
+        <PropertyRef Name="COMUNA_CMN_ID_COMUNA" />
+        <PropertyRef Name="COMUNA_RG_ID_REGION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DEPARTAMENTO_CONDOMINIO_FK">
+    <End Role="CONDOMINIO" Type="Model_Condominio.Store.CONDOMINIO" Multiplicity="1" />
+    <End Role="DEPARTAMENTO" Type="Model_Condominio.Store.DEPARTAMENTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CONDOMINIO">
+        <PropertyRef Name="CN_ID_CONDOMINIO" />
+        <PropertyRef Name="COMUNA_CMN_ID_COMUNA" />
+        <PropertyRef Name="COMUNA_RG_ID_REGION" />
+      </Principal>
+      <Dependent Role="DEPARTAMENTO">
+        <PropertyRef Name="CONDOMINIO_CN_ID_CONDOMINIO" />
+        <PropertyRef Name="CONDOMINIO_CMN_ID_COMUNA" />
+        <PropertyRef Name="CONDOMINIO_RG_ID_REGION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ESPACIO_COMUN_CONDOMINIO_FK">
+    <End Role="CONDOMINIO" Type="Model_Condominio.Store.CONDOMINIO" Multiplicity="1" />
+    <End Role="ESPACIO_COMUN" Type="Model_Condominio.Store.ESPACIO_COMUN" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CONDOMINIO">
+        <PropertyRef Name="CN_ID_CONDOMINIO" />
+        <PropertyRef Name="COMUNA_CMN_ID_COMUNA" />
+        <PropertyRef Name="COMUNA_RG_ID_REGION" />
+      </Principal>
+      <Dependent Role="ESPACIO_COMUN">
+        <PropertyRef Name="CONDOMINIO_CN_ID_CONDOMINIO" />
+        <PropertyRef Name="CONDOMINIO_CMN_ID_COMUNA" />
+        <PropertyRef Name="CONDOMINIO_RG_ID_REGION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="GASTOS_COMUNES_DEPARTAMENTO_FK">
+    <End Role="DEPARTAMENTO" Type="Model_Condominio.Store.DEPARTAMENTO" Multiplicity="1" />
+    <End Role="GASTOS_COMUNES" Type="Model_Condominio.Store.GASTOS_COMUNES" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DEPARTAMENTO">
+        <PropertyRef Name="DPT_ID_DEPTO" />
+      </Principal>
+      <Dependent Role="GASTOS_COMUNES">
+        <PropertyRef Name="DEPARTAMENTO_DPT_ID_DEPTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MANTENCION_CONDOMINIO_FK">
+    <End Role="CONDOMINIO" Type="Model_Condominio.Store.CONDOMINIO" Multiplicity="1" />
+    <End Role="MANTENCION" Type="Model_Condominio.Store.MANTENCION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CONDOMINIO">
+        <PropertyRef Name="CN_ID_CONDOMINIO" />
+        <PropertyRef Name="COMUNA_CMN_ID_COMUNA" />
+        <PropertyRef Name="COMUNA_RG_ID_REGION" />
+      </Principal>
+      <Dependent Role="MANTENCION">
+        <PropertyRef Name="CONDOMINIO_CN_ID_CONDOMINIO" />
+        <PropertyRef Name="CONDOMINIO_CMN_ID_COMUNA" />
+        <PropertyRef Name="CONDOMINIO_RG_ID_REGION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MANTENCION_GASTOS_COMUNES_FK">
+    <End Role="GASTOS_COMUNES" Type="Model_Condominio.Store.GASTOS_COMUNES" Multiplicity="1" />
+    <End Role="MANTENCION" Type="Model_Condominio.Store.MANTENCION" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GASTOS_COMUNES">
+        <PropertyRef Name="GC_ID_GASTO" />
+      </Principal>
+      <Dependent Role="MANTENCION">
+        <PropertyRef Name="GASTOS_COMUNES_GC_ID_GASTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PAGO_GASTOS_COMUNES_FK">
+    <End Role="GASTOS_COMUNES" Type="Model_Condominio.Store.GASTOS_COMUNES" Multiplicity="1" />
+    <End Role="PAGO" Type="Model_Condominio.Store.PAGO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GASTOS_COMUNES">
+        <PropertyRef Name="GC_ID_GASTO" />
+      </Principal>
+      <Dependent Role="PAGO">
+        <PropertyRef Name="GASTOS_COMUNES_GC_ID_GASTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PAGO_USUARIO_FK">
+    <End Role="USUARIO" Type="Model_Condominio.Store.USUARIO" Multiplicity="1" />
+    <End Role="PAGO" Type="Model_Condominio.Store.PAGO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USUARIO">
+        <PropertyRef Name="USU_RUT" />
+      </Principal>
+      <Dependent Role="PAGO">
+        <PropertyRef Name="USUARIO_USU_RUT" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RESERVA_DEPARTAMENTO_FK">
+    <End Role="DEPARTAMENTO" Type="Model_Condominio.Store.DEPARTAMENTO" Multiplicity="1" />
+    <End Role="RESERVA" Type="Model_Condominio.Store.RESERVA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DEPARTAMENTO">
+        <PropertyRef Name="DPT_ID_DEPTO" />
+      </Principal>
+      <Dependent Role="RESERVA">
+        <PropertyRef Name="DEPARTAMENTO_DPT_ID_DEPTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RESERVA_ESPACIO_COMUN_FK">
+    <End Role="ESPACIO_COMUN" Type="Model_Condominio.Store.ESPACIO_COMUN" Multiplicity="1" />
+    <End Role="RESERVA" Type="Model_Condominio.Store.RESERVA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESPACIO_COMUN">
+        <PropertyRef Name="EC_ID_ESPACIO" />
+      </Principal>
+      <Dependent Role="RESERVA">
+        <PropertyRef Name="ESPACIO_COMUN_EC_ID_ESPACIO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="RESERVA_GASTOS_COMUNES_FK">
+    <End Role="GASTOS_COMUNES" Type="Model_Condominio.Store.GASTOS_COMUNES" Multiplicity="1" />
+    <End Role="RESERVA" Type="Model_Condominio.Store.RESERVA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GASTOS_COMUNES">
+        <PropertyRef Name="GC_ID_GASTO" />
+      </Principal>
+      <Dependent Role="RESERVA">
+        <PropertyRef Name="GASTOS_COMUNES_GC_ID_GASTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="USUARIO_DEPARTAMENTO_FK">
+    <End Role="DEPARTAMENTO" Type="Model_Condominio.Store.DEPARTAMENTO" Multiplicity="1" />
+    <End Role="USUARIO" Type="Model_Condominio.Store.USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DEPARTAMENTO">
+        <PropertyRef Name="DPT_ID_DEPTO" />
+      </Principal>
+      <Dependent Role="USUARIO">
+        <PropertyRef Name="DEPARTAMENTO_DPT_ID_DEPTO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

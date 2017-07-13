@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Ingresar Multas";
+    Layout = "~/Views/Compartida/_PaginaDiseño3.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <h3>
+            <strong>INGRESAR MULTAS</strong>
+        </h3>
+        <hr />
+    </div>
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <p class="help-block">Las multas se asocian a las residencias</p>
+                <form class="form-inline">
+                    <label for="selectCondominio">Condominio</label>
+                    <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio" onchange="filtrarViviendas()"></select>
+                    <label for="selectResidencia1">Residencias</label>
+                    <select class="form-control" name="selectResidencia1" id="selectResidencia1">
+                        <option value="">Seleccione</option>
+                    </select>
+                </form>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div id="nuevaMulta" class="alert alert-danger">
+                    <div class="form-group">
+                        <label>Motivo de la Multa</label>**
+                        <textarea type="text" id="txtMotivo" style="min-height:50px" class="form-control" maxlength="100" placeholder="..máximo 100 caracteres.."></textarea>                        
+                        <label>Monto a Cancelar</label>**
+                        <input type="number" id="txtMonto" class="form-control" min="1" placeholder="..cifra a cobrar">
+                        <br />
+                        <p class="help-block">La fecha de emición se guarda automáticamente al momento de registrar la multa</p>
+                    </div>   
+                    <button type="button" class="btn btn-danger" onclick="ingresarMulta()">Ingresar Multa</button>
+                </div>
+            </div>
+            <!-- .panel-body -->
+        </div>
+        <!-- /.panel -->
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        cargarMisCondominios();
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function cargarMisCondominios() {
+        $("#panelReservar").hide();
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+    }
+
+    function filtrarViviendas() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "") {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia1").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Panta ' + celda[3] + "</option>"
+                            $("#selectResidencia1").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                        $("#selectResidencia1").empty()
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+
+    function ingresarMulta()
+    {
+        var vivienda = $('select#selectResidencia1').val();
+        var descricion = $('#txtMotivo').val();
+        var monto = $('#txtMonto').val();
+
+        if(vivienda=="")
+        {
+            Alert.render('Debe determinar una vivienda a multar');
+        } else {
+            if(descricion.length<6)
+            {
+                Alert.render('Debe indicar un motivo por generar la multa');
+            } else {
+                if(monto==0)
+                {
+                    Alert.render('Debe indicar un monto por generar la multa');
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("IngresarMulta", "Multas")',
+                        content: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: { "Vivienda":vivienda,"Descipcion":descricion,"Monto":monto},
+                        success: function (respuesta) {
+                            if (respuesta.model != "") {
+                                
+                                Alert.render('Multa ingresada correctamente');
+                                $('#txtMotivo').val("");
+                                $('#txtMonto').val("");
+                                
+                            } else {
+                                Alert.render('No se han conseguido ingresar la multa');
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                        }
+                    });
+                }
+            }
+        }
+    }
+   
+
+</script>

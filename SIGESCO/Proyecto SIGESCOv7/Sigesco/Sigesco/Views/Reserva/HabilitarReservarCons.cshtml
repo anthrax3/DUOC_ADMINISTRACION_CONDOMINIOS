@@ -1,0 +1,417 @@
+﻿@{
+    ViewBag.Title = "Habilitar Reservar";
+    Layout = "~/Views/Compartida/_PaginaDiseño4.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <div class="row">
+        <h3>
+            <strong>DATOS DE RESERVAS</strong>
+        </h3>
+        <hr />
+    </div>
+    <div class="well" id="filtro">
+        <h4>Seleccione el espacio común a consultar y responder</h4>
+        <form class="form-inline">
+            <label for="selectCondominio">Condominio</label>
+            <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio" onchange="filtrarEspacio()"></select>
+            <label for="selectEspacio">Espacio Común</label>
+            <select style="width:250px" class="form-control" name="selectEspacio" id="selectEspacio" onchange="ocultar()">
+                <option value="">Seleccione</option>
+            </select>
+            <button type="button" id="btnFiltrar" class="btn btn-primary" onclick="filtrarReservas()">Filtrar Datos</button>
+        </form>
+    </div>
+    <!-- /.row -->
+    <div class="row" id="tabla_reserv" hidden>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Información de Reservaciones Solicitadas
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="alert alert-info" style="overflow-x: auto;">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="tabla">
+                            <thead>
+                                <tr>
+                                    <th>Residente Solicitante</th>
+                                    <th>Dirección</th>
+                                    <th>Espacio Reservado</th>
+                                    <th>Fecha Solicitada</th>
+                                    <th>Estado Solicitud</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo"></tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="panel-body" id="mensajeTablaVacia" hidden>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Espacio Sin Solicitudes
+            </div>
+            <div class="panel-body">
+                <p>El espacio seleccionado no cuenta con reservaciones en espera de respuesta</p>
+            </div>
+        </div>
+    </div>
+    <div id="botonReservar" hidden>
+        <button type="button" id="btnAbrirReserva" class="btn btn-primary btn-lg" onclick="solicitarReserva()">Responder Solicitud</button>
+    </div>
+    <!-- /.row -->
+    <div class="panel-body" id="panelReservar" hidden>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Actualizar Solicitud de Reserva
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="selectCondominio2">Condominio</label>
+                    <select class="form-control" name="selectCondominio2" id="selectCondominio2" onchange="filtrarViviendas()"></select>
+                    <label for="selectResidencia1">Residencias</label>
+                    <select class="form-control" name="selectResidencia1" id="selectResidencia1" onchange="filtrarReservas2()">
+                        <option value="">Seleccione</option>
+                    </select>
+                    <label for="selectReservas">Reservas</label>
+                    <select class="form-control" name="selectReservas" id="selectReservas">
+                        <option value="">Seleccione</option>
+                    </select>
+                    <input type="radio" name="accion" value="RESERVADO"> Reservar<br>
+                    <input type="radio" name="accion" value="RECHAZADO"> Rechazar<br>
+                    <hr />
+                    <button type="button" class="btn btn-success" onclick="reservar()">Actualizar Solicitud Reserva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery.js"></script>
+<script>
+
+    $(document).ready(function () {
+        cargarMisCondominios();
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();    
+
+    function ocultar() {
+        $("#panelReservar").hide();
+        $("#tabla_reserv").hide();
+        $("#botonReservar").hide();
+        $('select#selectCondominio2').val("");
+        $('select#selectReservas').val("");
+        $('select#selectResidencia1').val(""); 
+    }
+
+    function cargarMisCondominios() {
+        $("#panelReservar").hide();
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    $("#selectCondominio2").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    $("#selectCondominio2").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                        $("#selectCondominio2").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                    $("#selectCondominio2").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener condominios por usuario"');
+            }
+        });
+    }
+
+    function filtrarEspacio() {
+        $("#panelReservar").hide();
+        var condominio = $('select#selectCondominio').val();
+
+        if (condominio != "") {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerEspaciosPorCondominio", "AreasComunes")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    $("#botonReservar").hide();
+                    if (respuesta.model != "") {
+                        $("#selectEspacio").empty()
+                        var filas = respuesta.model.length;
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                            $("#selectEspacio").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado espacios comunes para su condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener espacios por condominio"');
+                }
+            });
+        }else
+        {
+            $("#selectEspacio").empty()
+            $("#selectEspacio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+        }
+    }
+    function filtrarViviendas() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "") {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia1").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Planta ' + celda[3] + "</option>"
+                            $("#selectResidencia1").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                        $("#selectResidencia1").empty()
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    function filtrarReservas2() {
+        var vivienda = $('select#selectResidencia1').val();
+        var espacio = $('select#selectEspacio').val();
+        if (vivienda == "") {
+            Alert.render('Debe indicar una residencia');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ReservasPorViviendaSolicitado", "Reserva")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Vivienda": vivienda ,"Espacio":espacio},
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectReservas").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectReservas").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[7] + ">Espacio Solicitado: " + celda[4] + ' Fecha Solcitada: ' + celda[5] + "</option>"
+                            $("#selectReservas").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado reservas para esta vivienda');
+                        $("#selectReservas").empty()
+                        $("#selectReservas").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        $('select#selectResidencia1').val("");
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener reservas por vivienda"');
+                }
+            });
+        }
+    }
+
+    function filtrarReservas() {
+        $("#panelReservar").hide();
+        var espacio = $('select#selectEspacio').val();
+
+        if (espacio == "") {
+            Alert.render("Debe seleccionar un espacio para ver su estado de disponibilidad");
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ReservasPorEspacioSolicitado", "Reserva")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "EC_ID_ESPACIO": espacio },
+                success: function (respuesta) {
+                    $("#tabla_reserv").hide();
+                    $("#mensajeTablaVacia").hide();
+                    if (respuesta.model.length != 0) {
+                        $("#cuerpo").empty()
+                        var filas = respuesta.model.length;
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila = "<tr>"+
+                                "<td>" + celda[0].toString().toUpperCase()+" "+ celda[1].toString().toUpperCase() + "</td>"+
+                                "<td>" + celda[3].toString().toUpperCase()+" #"+ celda[2].toString().toUpperCase() + "</td>" +
+                                 "<td>" + celda[4] + "</td>" +
+                                "<td>" + celda[5] + "</td>" +
+                                "<td>" + celda[6] + "</td></tr>"
+                            $("#tabla").append(nuevafila)
+                        }
+                        $("#tabla_reserv").show();
+                    } else {
+                        $("#mensajeTablaVacia").show();
+                    }
+                    $("#botonReservar").show();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error al cargar el metodo del controlador');
+                }
+            });
+        }
+    }//fin filtrarReservas()
+
+
+    function solicitarReserva()
+    {
+        var usuario = $('#lb_usuario').val();
+        var condominio = $('select#selectCondominio').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerViviendasPorUsuarioPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario, "Condominio": condominio },
+            success: function (respuesta) {
+
+                if (respuesta.model != "") {
+                    $("#viviendaSelect").empty()
+                    $("#viviendaSelect").append("<option value="+'"'+'"'+">Seleccione Vivienda</option>");
+                    var filas = respuesta.model.length;
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[2] + " " + celda[1] + " / " + celda[5] + "</option>"
+                        $("#viviendaSelect").append(nuevafila)
+                    }
+                } else {
+                    $('#filtro').hide();
+                    Alert.render('No se han encontrado viviendas para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+        $("#panelReservar").show();
+    }
+
+    function reservar()
+    {
+        var reserva = $('select#selectReservas').val();
+        var accion = $("input[name='accion']:checked").val();
+
+        if (reserva == "") {
+            Alert.render("Debe seleccionar una reserva");
+        } else {
+            if (accion == "")
+            {
+                Alert.render("Debe indicar una acción");
+            }else
+            {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ArpobarReservaConserje", "Reserva")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Accion": accion, "Reserva": reserva, },
+                    success: function (respuesta) {
+
+                        if (respuesta.model == true) {
+                            Alert.render('Reserva actualizada exitosamente');
+                            ocultar();
+                        } else {
+                            Alert.render('No se ha conseguido actualizar la reserva');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error al cargar el metodo del controlador');
+                    }
+                });
+            }
+        }
+    }
+
+</script>
+

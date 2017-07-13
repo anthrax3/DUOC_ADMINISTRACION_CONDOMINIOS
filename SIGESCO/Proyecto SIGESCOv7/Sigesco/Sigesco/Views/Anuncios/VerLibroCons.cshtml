@@ -1,0 +1,158 @@
+﻿@{
+    ViewBag.Title = "Ver Libro";
+    Layout = "~/Views/Compartida/_PaginaDiseño4.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <h3>
+            <strong>LIBRO DE ACTAS</strong>
+        </h3>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="form-inline">
+                <label for="selectCondominio">Condominio</label>
+                <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio">
+                    <option value="">Seleccione</option>
+                </select>
+                <button type="button" class="btn btn-primary" onclick="MostrarLibro()">Abrir Libro</button>
+            </form>
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div>
+                        <h4>Libro de Actas</h4>
+                    </div>
+                </div>
+                <!-- /.panel-heading -->
+                <div id="panelBody" class="panel-body">
+
+                </div>
+                <!-- .panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-6 -->
+    </div>
+</div>
+<!-- /.container-fluid -->
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        cargarMisCondominios();
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function cargarMisCondominios() {
+        $("#panelReservar").hide();
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener viviendas por usuario"');
+            }
+        });
+    }
+
+    function MostrarLibro() {
+
+        var condominio = $('select#selectCondominio').val();
+
+        if(condominio=="")
+        {
+            Alert.render('Debe seleccionar un condominio de residencia');
+        }else
+        {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListarLibro", "Anuncios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#panelBody").empty();
+                        var filas = respuesta.model.length;
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split("|");
+                            var nuevafila = "<div class=" + '"' + "alert alert-default" + '"' + ">" +
+                            "<span class=" + '"' + "pull-right text-muted" + '"' + ">" +
+                            "<em>" + celda[0] + "</em></span><br/>" +
+                            "<h4>" + celda[1] + "</h4>"
+                            + celda[2] + "</div>";
+                            $("#panelBody").append(nuevafila)
+                        }
+                    } else {
+                        Alert.render('No se han encontrado eventos para su condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener Eventos"');
+                }
+            });
+        }
+    }
+
+</script>

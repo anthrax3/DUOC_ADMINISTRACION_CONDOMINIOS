@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelSigescoStoreContainer" CdmEntityContainer="SigescoEntities">
+    <EntitySetMapping Name="ANUNCIOS">
+      <EntityTypeMapping TypeName="ModelSigesco.ANUNCIOS">
+        <MappingFragment StoreEntitySet="ANUNCIOS">
+          <ScalarProperty Name="ID_ANUNCIO" ColumnName="ID_ANUNCIO" />
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+          <ScalarProperty Name="TITULO" ColumnName="TITULO" />
+          <ScalarProperty Name="CUERPO" ColumnName="CUERPO" />
+          <ScalarProperty Name="REMITENTE" ColumnName="REMITENTE" />
+          <ScalarProperty Name="FECHA_ANUNCIO" ColumnName="FECHA_ANUNCIO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COMUNA">
+      <EntityTypeMapping TypeName="ModelSigesco.COMUNA">
+        <MappingFragment StoreEntitySet="COMUNA">
+          <ScalarProperty Name="ID_COMUNA" ColumnName="ID_COMUNA" />
+          <ScalarProperty Name="ID_REGION" ColumnName="ID_REGION" />
+          <ScalarProperty Name="NOMBRE_COMUNA" ColumnName="NOMBRE_COMUNA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CONDOMINIO">
+      <EntityTypeMapping TypeName="ModelSigesco.CONDOMINIO">
+        <MappingFragment StoreEntitySet="CONDOMINIO">
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+          <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+          <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+          <ScalarProperty Name="NUMERO_DIRECCION" ColumnName="NUMERO_DIRECCION" />
+          <ScalarProperty Name="ID_COMUNA" ColumnName="ID_COMUNA" />
+          <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ESPACIOS_COMUNES">
+      <EntityTypeMapping TypeName="ModelSigesco.ESPACIOS_COMUNES">
+        <MappingFragment StoreEntitySet="ESPACIOS_COMUNES">
+          <ScalarProperty Name="ID_ESPACIO" ColumnName="ID_ESPACIO" />
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+          <ScalarProperty Name="NOMBRE_ESPACIO" ColumnName="NOMBRE_ESPACIO" />
+          <ScalarProperty Name="DESCRIPCION_ESPACIO" ColumnName="DESCRIPCION_ESPACIO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GASTO">
+      <EntityTypeMapping TypeName="ModelSigesco.GASTO">
+        <MappingFragment StoreEntitySet="GASTO">
+          <ScalarProperty Name="ID_GASTO" ColumnName="ID_GASTO" />
+          <ScalarProperty Name="NOMBRE_GASTO" ColumnName="NOMBRE_GASTO" />
+          <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+          <ScalarProperty Name="FECHA_GASTO" ColumnName="FECHA_GASTO" />
+          <ScalarProperty Name="ID_VIVIENDA" ColumnName="ID_VIVIENDA" />
+          <ScalarProperty Name="ID_TIPO_GASTO" ColumnName="ID_TIPO_GASTO" />
+          <ScalarProperty Name="MONTO_GASTO" ColumnName="MONTO_GASTO" />
+          <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+          <ScalarProperty Name="OBSERVACION" ColumnName="OBSERVACION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LIBRO_SUCESOS">
+      <EntityTypeMapping TypeName="ModelSigesco.LIBRO_SUCESOS">
+        <MappingFragment StoreEntitySet="LIBRO_SUCESOS">
+          <ScalarProperty Name="ID_SUCESO" ColumnName="ID_SUCESO" />
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+          <ScalarProperty Name="REFERENCIA" ColumnName="REFERENCIA" />
+          <ScalarProperty Name="DETALLES" ColumnName="DETALLES" />
+          <ScalarProperty Name="FECHA_SUCESO" ColumnName="FECHA_SUCESO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PAGO">
+      <EntityTypeMapping TypeName="ModelSigesco.PAGO">
+        <MappingFragment StoreEntitySet="PAGO">
+          <ScalarProperty Name="ID_PAGO" ColumnName="ID_PAGO" />
+          <ScalarProperty Name="ID_TIPO_PAGO" ColumnName="ID_TIPO_PAGO" />
+          <ScalarProperty Name="MONTO_PAGO" ColumnName="MONTO_PAGO" />
+          <ScalarProperty Name="DOCUMENTO" ColumnName="DOCUMENTO" />
+          <ScalarProperty Name="FECHA" ColumnName="FECHA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PAGOXGASTO">
+      <EntityTypeMapping TypeName="ModelSigesco.PAGOXGASTO">
+        <MappingFragment StoreEntitySet="PAGOXGASTO">
+          <ScalarProperty Name="ID_PAGOXGASTO" ColumnName="ID_PAGOXGASTO" />
+          <ScalarProperty Name="ID_GASTO" ColumnName="ID_GASTO" />
+          <ScalarProperty Name="ID_PAGO" ColumnName="ID_PAGO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PERSONA">
+      <EntityTypeMapping TypeName="ModelSigesco.PERSONA">
+        <MappingFragment StoreEntitySet="PERSONA">
+          <ScalarProperty Name="RUT" ColumnName="RUT" />
+          <ScalarProperty Name="PRIMER_NOMBRE" ColumnName="PRIMER_NOMBRE" />
+          <ScalarProperty Name="SEGUNDO_NOMBRE" ColumnName="SEGUNDO_NOMBRE" />
+          <ScalarProperty Name="APELLIDO_PATERNO" ColumnName="APELLIDO_PATERNO" />
+          <ScalarProperty Name="APELLIDO_MATERNO" ColumnName="APELLIDO_MATERNO" />
+          <ScalarProperty Name="FECHA_NACIMIENTO" ColumnName="FECHA_NACIMIENTO" />
+          <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+          <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+          <ScalarProperty Name="SEXO" ColumnName="SEXO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="REGION">
+      <EntityTypeMapping TypeName="ModelSigesco.REGION">
+        <MappingFragment StoreEntitySet="REGION">
+          <ScalarProperty Name="ID_REGION" ColumnName="ID_REGION" />
+          <ScalarProperty Name="NOMBRE_REGION" ColumnName="NOMBRE_REGION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RESERVA">
+      <EntityTypeMapping TypeName="ModelSigesco.RESERVA">
+        <MappingFragment StoreEntitySet="RESERVA">
+          <ScalarProperty Name="ID_RESERVA" ColumnName="ID_RESERVA" />
+          <ScalarProperty Name="ID_VIVIENDA" ColumnName="ID_VIVIENDA" />
+          <ScalarProperty Name="FECHA_SOLICITUD" ColumnName="FECHA_SOLICITUD" />
+          <ScalarProperty Name="FECHA_RESERVADA" ColumnName="FECHA_RESERVADA" />
+          <ScalarProperty Name="ID_ESPACIO" ColumnName="ID_ESPACIO" />
+          <ScalarProperty Name="ESTADO_RESERVA" ColumnName="ESTADO_RESERVA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RESIDENTE">
+      <EntityTypeMapping TypeName="ModelSigesco.RESIDENTE">
+        <MappingFragment StoreEntitySet="RESIDENTE">
+          <ScalarProperty Name="ID_RESIDENTE" ColumnName="ID_RESIDENTE" />
+          <ScalarProperty Name="RUT" ColumnName="RUT" />
+          <ScalarProperty Name="ID_VIVIENDA" ColumnName="ID_VIVIENDA" />
+          <ScalarProperty Name="FECHA_INGRESO" ColumnName="FECHA_INGRESO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_GASTO">
+      <EntityTypeMapping TypeName="ModelSigesco.TIPO_GASTO">
+        <MappingFragment StoreEntitySet="TIPO_GASTO">
+          <ScalarProperty Name="ID_TIPO_GASTO" ColumnName="ID_TIPO_GASTO" />
+          <ScalarProperty Name="DESCRPCION" ColumnName="DESCRPCION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_PAGO">
+      <EntityTypeMapping TypeName="ModelSigesco.TIPO_PAGO">
+        <MappingFragment StoreEntitySet="TIPO_PAGO">
+          <ScalarProperty Name="ID_TIPO_PAGO" ColumnName="ID_TIPO_PAGO" />
+          <ScalarProperty Name="DESCRIPCION_TIPO" ColumnName="DESCRIPCION_TIPO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_USUARIO">
+      <EntityTypeMapping TypeName="ModelSigesco.TIPO_USUARIO">
+        <MappingFragment StoreEntitySet="TIPO_USUARIO">
+          <ScalarProperty Name="ID_TIPO_USUARIO" ColumnName="ID_TIPO_USUARIO" />
+          <ScalarProperty Name="DESCRIPCION_TIPO" ColumnName="DESCRIPCION_TIPO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USUARIO">
+      <EntityTypeMapping TypeName="ModelSigesco.USUARIO">
+        <MappingFragment StoreEntitySet="USUARIO">
+          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+          <ScalarProperty Name="ID_TIPO_USUARIO" ColumnName="ID_TIPO_USUARIO" />
+          <ScalarProperty Name="RUT" ColumnName="RUT" />
+          <ScalarProperty Name="CLAVE" ColumnName="CLAVE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USUARIO_X_CONDOMINIO">
+      <EntityTypeMapping TypeName="ModelSigesco.USUARIO_X_CONDOMINIO">
+        <MappingFragment StoreEntitySet="USUARIO_X_CONDOMINIO">
+          <ScalarProperty Name="ID_UXC" ColumnName="ID_UXC" />
+          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VIVIENDA">
+      <EntityTypeMapping TypeName="ModelSigesco.VIVIENDA">
+        <MappingFragment StoreEntitySet="VIVIENDA">
+          <ScalarProperty Name="ID_VIVIENDA" ColumnName="ID_VIVIENDA" />
+          <ScalarProperty Name="ID_CONDOMINIO" ColumnName="ID_CONDOMINIO" />
+          <ScalarProperty Name="NUMERO" ColumnName="NUMERO" />
+          <ScalarProperty Name="NOMBRE_CALLE" ColumnName="NOMBRE_CALLE" />
+          <ScalarProperty Name="PLANTA_UBICACION" ColumnName="PLANTA_UBICACION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

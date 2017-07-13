@@ -1,0 +1,494 @@
+﻿@{
+    ViewBag.Title = "Registrar Residentes";
+    Layout = "~/Views/Compartida/_PaginaDiseño3.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <input type="text" id="lb_nombreu" hidden value="@Session["UserName"].ToString()">
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+    </div>
+    <div class="row">
+        <h3>
+            <strong>REGISTRAR RESIDENTES</strong>
+        </h3>
+    </div>
+    <div class="row" id="tabla_reserv">
+        <div class="col-lg-12">
+            <form class="form-inline">
+                <label for="selectCondominio">Condominio</label>
+                <select style="width:250px" class="form-control" name="selectCondominio" id="selectCondominio">
+                    <option value="">Seleccione</option>
+                </select>
+                <div class="btn-group" data-toggle="buttons" >
+                    <input  type="button" class="btn btn-primary" onclick="verCrear()" value="Crear Persona, luego asignar residencia">
+                    <input type="button" class="btn btn-danger" onclick="verAsignar()" value="Sólo asignar residencia">
+                </div>                
+            </form>
+            <br />
+            <div class="panel panel-default" id="panelCrear" hidden>
+                <div class="panel-heading">
+                    Crear Persona y Asignar Residencia
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body" >
+                    <div id="personal" class="alert alert-warning">
+                        <h3>Información Personal</h3>
+                        <hr />
+                        <div class="form-group">
+                            <label>Primer Nombre</label>**
+                            <input type="text" id="txtNom" class="form-control">
+                            <label>Segundo Nombre</label>
+                            <input type="text" id="txtSegn" class="form-control">
+                            <label>Apellido Paterno</label>**
+                            <input type="text" id="txtApp" class="form-control">
+                            <label>Apellido Materno</label>
+                            <input type="text" id="txtApm" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Rut</label>**
+                            <input id="txtRut" class="form-control" placeholder="Ej: 12345678-9 / 12345678-k / 12345678-K" >
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento</label>**
+                            <input id="txtFecha" type="date" max="1999-01-01" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Telefono</label>
+                            <input id="txtFono" class="form-control" type="number" min="100000000" max="9999999999">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>**
+                            <input id="txtCorreo" class="form-control" type="email" placeholder="ejemplo@micorreo.cl">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSexo">Sexo</label>**
+                            <select id="txtSexo" class="form-control">
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="usuarioInfo" class="alert alert-warning">
+                        <h3>Información de Usuario</h3>
+                        <hr />
+                        <p class="help-block">Usuario Residente. El usuario le será indicado una vez que grabe los datos</p>
+                        <div class="form-group">
+                            <label>Contraseña</label>**
+                            <input id="txtClaveActual" class="form-control" type="text" placeholder="prefiera una combinación entre números y letras">
+                        </div>
+                        <div class="form-group">
+                            <label>Repetir Contraseña</label>**
+                            <input id="txtClaveNueva" class="form-control" type="text">
+                        </div>
+                    </div>
+                    <div id="residencias" class="alert alert-warning">
+                        <h3>Información de Residencias</h3>
+                        <hr />
+                        <label for="selectResidencia">Residencia a Asignar</label>**
+                        <select class="form-control" name="selectResidencia1" id="selectResidencia1">
+                            <option value="">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="btn-group" data-toggle="buttons">
+                        <input type="button" class="btn btn-primary" onclick="crearResidente()" value="Crear Residente">
+                    </div>
+                </div>
+            </div>
+                    <!-- /.panel -->
+            <div class="panel panel-default" id="panelAsignar" hidden>
+                <div class="panel-heading">
+                    Asignar Residencia a Persona Existente
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body" >
+                    <div class="alert alert-warning">
+
+                        <div class="form-inline">
+                            <label for="selectPersona">Seleccione Persona</label>
+                            <select  class="form-control" name="selectPersona" id="selectPersona">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <label for="selectResidencia">Residencia a Asignar</label>
+                            <select  class="form-control" name="selectResidencia2" id="selectResidencia2">
+                                <option value="">Seleccione</option>
+                            </select>                            
+                        </div>  
+                        <br />
+                        <div class="btn-group" data-toggle="buttons">
+                            <input type="button" class="btn btn-danger" onclick="Asignar()" value="Asignar Residente">
+                        </div> 
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+        <div id="dialogoverlay"></div>
+        <div id="dialogbox">
+            <div>
+                <div id="dialogboxhead"></div>
+                <div id="dialogboxbody"></div>
+                <div id="dialogboxfoot"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#panelTabla").hide();
+        cargarMisCondominios();
+
+    });
+    function CustomAlert() {
+        this.render = function (dialog) {
+            var winW = window.innerWidth;
+            var winH = window.innerHeight;
+            var dialogoverlay = document.getElementById('dialogoverlay');
+            var dialogbox = document.getElementById('dialogbox');
+            dialogoverlay.style.display = "block";
+            dialogoverlay.style.height = winH + "px";
+            dialogbox.style.left = (winW / 2) - (550 * .5) + "px";
+            dialogbox.style.top = "100px";
+            dialogbox.style.display = "block";
+            document.getElementById('dialogboxhead').innerHTML = "Información";
+            document.getElementById('dialogboxbody').innerHTML = dialog;
+            document.getElementById('dialogboxfoot').innerHTML = '<button onclick="Alert.ok()">Entendido</button>';
+        }
+        this.ok = function () {
+            document.getElementById('dialogbox').style.display = "none";
+            document.getElementById('dialogoverlay').style.display = "none";
+        }
+    }
+    var Alert = new CustomAlert();
+
+    function cargarMisCondominios() {
+        var usuario = $('#lb_usuario').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ObtenerCondominiosPorUsuario", "Condominios")',
+            content: "application/json; charset=utf-8",
+            dataType: "json",
+            data: { "Usuario": usuario },
+            success: function (respuesta) {
+                $("#botonReservar").hide();
+                if (respuesta.model != "") {
+                    $("#selectCondominio").hide()
+                    $("#filtro").show();
+                    $("#selectCondominio").empty()
+                    var filas = respuesta.model.length;
+                    $("#selectCondominio").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                    for (i = 0 ; i < filas; i++) {
+                        var fila = respuesta.model[i];
+                        var celda = fila.toString().split(";");
+                        var nuevafila =
+                            "<option value=" + celda[0] + ">" + celda[1] + "</option>"
+                        $("#selectCondominio").append(nuevafila)
+                    }
+                    $("#selectCondominio").show();
+                } else {
+                    Alert.render('No se han encontrado condominios para su usuario');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                Alert.render('Error: No se pudo cargar método "Obtener condominios por usuario"');
+            }
+        });
+    }
+
+    function verCrear() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "")
+        {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia1").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia1").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Panta '+celda[3] + "</option>"
+                            $("#selectResidencia1").append(nuevafila)
+                        }
+
+                        $("#panelAsignar").hide();
+                        $("#panelCrear").show();
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    function verAsignar() {
+        var condominio = $('select#selectCondominio').val();
+        if (condominio == "") {
+            Alert.render('Debe indicar un condominio');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ObtenerResidenciasPorCondominio", "Condominios")',
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                data: { "Condominio": condominio },
+                success: function (respuesta) {
+                    if (respuesta.model != "") {
+                        $("#selectResidencia2").empty()
+                        var filas = respuesta.model.length;
+                        $("#selectResidencia2").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                        for (i = 0 ; i < filas; i++) {
+                            var fila = respuesta.model[i];
+                            var celda = fila.toString().split(";");
+                            var nuevafila =
+                                "<option value=" + celda[0] + ">" + celda[1] + ' #' + celda[2] + ' - Piso/Panta ' + celda[3] + "</option>"
+                            $("#selectResidencia2").append(nuevafila)
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("GetPersonas", "Usuario")',
+                            content: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (respuesta) {
+                                if (respuesta.model != "") {
+                                    $("#selectPersona").empty()
+                                    var filas = respuesta.model.length;
+                                    $("#selectPersona").append("<option value=" + '"' + '"' + ">Seleccione</option>")
+                                    for (i = 0 ; i < filas; i++) {
+                                        var fila = respuesta.model[i];
+                                        var celda = fila.toString().split(";");
+                                        var nuevafila =
+                                            "<option value=" + celda[0] + ">" + celda[1] + ' :: ' + celda[2] + ' ' + celda[3] + "</option>"
+                                        $("#selectPersona").append(nuevafila)
+                                    }
+
+                                    $("#panelAsignar").show();
+                                    $("#panelCrear").hide();
+                                } else {
+                                    Alert.render('No se han encontrado personas en el sistema');
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                Alert.render('Error: No se pudo cargar método "Obtener personas"');
+                            }
+                        });
+                    } else {
+                        Alert.render('No se han encontrado viviendas para este condominio');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    Alert.render('Error: No se pudo cargar método "Obtener viviendas por condominios"');
+                }
+            });
+        }
+    }
+
+    var Fn = {
+        // Valida el rut con su cadena completa "XXXXXXXX-X"
+        dv: function (T) {
+            var M = 0, S = 1;
+            for (; T; T = Math.floor(T / 10))
+                S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        },
+        validaRut: function (rutCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) {
+                Alert.render('Debe ingresar rut en formato indicado');
+                return false;
+            }
+            var tmp = rutCompleto.split('-');
+            var digv = tmp[1];
+            var rut = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(rut) == digv);
+        }
+
+    }
+
+    function valEmail(valor){
+        re=/^[_a-z0-9-]+(.[_a-z0-9-]+)*@@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/
+        if(!re.exec(valor))    {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+
+    function crearResidente()
+    {
+        var rut = $("#txtRut").val();
+        var valido = "inválido";
+        var primerNom = $("#txtNom").val();
+        var segNom = $("#txtSegn").val();
+        var app = $("#txtApp").val();
+        var apm = $("#txtApm").val();
+        var fecha = $("#txtFecha").val();
+        var fono = $("#txtFono").val();
+        var email = $("#txtCorreo").val();
+        var sexo = $("#txtSexo").val();
+        var pass = $("#txtClaveActual").val();
+        var pass2 = $("#txtClaveNueva").val();
+        var residencia = $('select#selectResidencia1').val();
+        var condominio = $('select#selectCondominio').val();
+
+        if (primerNom == "" || primerNom.length < 3)
+        {
+            Alert.render('Debe ingresar un primer nombre');
+        } else {
+            if(app =="" || app.length<3)
+            {
+                Alert.render('Debe ingresar un apellido paterno');
+            } else {
+                if (rut == "") {
+                    Alert.render('Debe ingresar un rut ');
+                } else {
+                    valido = Fn.validaRut(rut) ? 'Valido' : 'inválido'
+                    if (valido == "inválido") {
+                        Alert.render('Debe ingresar un rut válido');
+                    }
+                    else {
+                        if (fecha == "")
+                        {
+                            Alert.render('Debe ingresar una fecha de nacimiento');
+                        } else {
+                            if(!valEmail(email))
+                            {
+                                Alert.render('Debe ingresar un correo válido');
+                            }else
+                            {
+                                if(pass.length<6)
+                                {
+                                    Alert.render('La contraseña debe tener al menos 6 caracteres');
+                                }else{
+                                    if(pass != pass2)
+                                    {
+                                        Alert.render('Las contraseñas no coinciden');
+                                    } else {                                        
+                                        var datos = {
+                                            "Rut":rut,
+                                            "PrimerNom": primerNom,
+                                            "SegNom": segNom,
+                                            "ApePat": app,
+                                            "ApeMat": apm,
+                                            "Fecha": fecha,
+                                            "Fono": fono,
+                                            "Email": email,
+                                            "Sexo": sexo,
+                                            "Pass": pass,
+                                            "Residencia": residencia,
+                                            "Condominio": condominio
+                                        }
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: '@Url.Action("CrearResidente", "Residentes")',
+                                            content: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            data: datos,
+                                            success: function (respuesta) {
+                                                var datos = respuesta.model.split(";");
+                                                if (datos[0].toString()!='0') {
+                                                    Alert.render('El usuario Creado: ' + datos[0] + ' Clave asignada: ' + pass);
+                                                    limpiar();
+
+                                                } else {
+                                                    Alert.render('El usuario ya está registrado en la base de datos, seleccione el modo "Sólo asignar residencia"');
+                                                    $("#panelAsignar").hide();
+                                                    $("#panelCrear").hide();
+                                                    limpiar();
+                                                }
+                                            },
+                                            error: function (xhr, textStatus, errorThrown) {
+                                                Alert.render('Error: No se pudo cargar método "Ingresar nuevo residente"');
+                                            }
+                                        });
+                                        
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    function Asignar()
+    {
+        var residencia = $('select#selectResidencia2').val();
+        var condominio = $('select#selectCondominio').val();
+        var persona = $('select#selectPersona').val();
+
+        if(persona=="")
+        {
+            Alert.render('Debe seleccionar a una persona');
+        }else
+        {
+            if(residencia=="")
+            {
+                Alert.render('Debe seleccionar un residencia para asignar');
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AsignarResidente", "Residentes")',
+                    content: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { "Residencia": residencia,"Persona": persona, "Condominio":condominio },
+                    success: function (respuesta) {
+                        var datos = respuesta.model.split(";");
+                        if (datos[0].toString() != '0') {
+                            Alert.render('El residente ha sido ingresado satisfactoriamente ');
+                            $("#panelAsignar").hide();
+
+                        } else {
+                            Alert.render('El residente ya esta registrado en esa vivienda"');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Alert.render('Error: No se pudo cargar método "Ingresar nuevo residente"');
+                    }
+                });
+            }
+        }
+
+    }
+
+    function limpiar()
+    {
+        $("#txtRut").val("");
+        $("#txtNom").val("");
+        $("#txtSegn").val("");
+        $("#txtApp").val("");
+        $("#txtApm").val("");
+        $("#txtFecha").val("");
+        $("#txtFono").val("");
+        $("#txtCorreo").val("");
+        $("#txtClaveActual").val("");
+        $("#txtClaveNueva").val("");
+        $("#selectResidencia1").val("");
+    }
+
+
+</script>
+

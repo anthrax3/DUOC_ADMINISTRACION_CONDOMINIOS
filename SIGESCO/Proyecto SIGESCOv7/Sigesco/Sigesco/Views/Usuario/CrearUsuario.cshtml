@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "CrearUsuario";
+    Layout = "~/Views/Compartida/_PaginaDiseño2.cshtml";
+}
+
+<div class="center">
+
+    <!-- Page Content -->
+    <div class="row">
+
+        <div class="centrar" style="min-height: 657px;">
+            <div>
+                <h3 class="page-header">Crear Nuevo Usuario
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <!--Para que se envíe devuelta al contorller utilizar el atributo "method"-->
+                <form role="form" method="post">
+                    <h4>Por favor complete todos los campos solicitados</h4>
+                    <div class="form-group">
+                        <label for="txtRut">
+                            Rut:
+                        </label>
+                        <input type="text" name="txtRut" id="txtRut" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDigito">
+                            Digito:
+                        </label>
+                        <input type="text" name="txtDigito" id="txtDigito" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtNombre">
+                            Nombre:
+                        </label>
+                        <input type="text" name="txtNombre" id="txtNombre" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtApellido">
+                            Apellido:
+                        </label>
+                        <input type="text" name="txtApellido" id="txtApellido" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtClave">
+                            Contraseña:
+                        </label>
+                        <input type="text" name="txtClave" id="txtClave" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtTelefono">
+                            Telefono:
+                        </label>
+                        <input type="text" name="txtTelefono" id="txtTelefono" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtEmail">
+                            Email:
+                        </label>
+                        <input type="email" name="txtEmail" id="txtEmail" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtIDUsuario">
+                            Id Tipo Usuario:
+                        </label>
+                        <input type="text" name="txtIDUsuario" id="txtIDUsuario" class="form-control" required="required">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txtDepartamento">
+                            Número Departamento:
+                        </label>
+                        <input type="text" name="txtDepartamento" id="txtDepartamento" class="form-control" required="required">
+                    </div>
+                    <input class="btn btn-primary btn-block" type="submit" value="Crear Nuevo Usuario" />
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>

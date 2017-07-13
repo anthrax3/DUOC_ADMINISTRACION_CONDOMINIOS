@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sistema de gestión de condominios">
+    <meta name="author" content="Bastian Salazar">
+
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link rel="icon" href="@Url.Content("~/Content/favicon/favicon.ico")" type="image/x-icon">
+    <link href="@Url.Content("~/Content/css/Sigesco.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/metisMenu.min.css")" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/sb-admin-2.css")" rel="stylesheet">
+
+
+    @RenderSection("head", false)
+</head>
+<body>
+        
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom:0">            
+
+            <!-- Top Izquierda-->
+            <div class="navbar-header" style="margin-left:2%">
+                <a class="navbar-brand"><strong>SIGESCO</strong></a>
+            </div>
+
+            <!-- Top Menu Items Derecha -->
+           <div class="nav navbar-right top-nav">
+                <h5 class="media-heading">
+                    <strong>
+                        <!--action name | controller| Texto -->
+                         <a class="navbar-brand" href="@Url.Action("IniciarSesion","Inicio")">Iniciar Sesión</a>
+                    </strong>
+                </h5>
+           </div>
+            <!-- Top Menu Items Derecha-->
+           <div class="nav navbar-right top-nav">
+                <h5 class="media-heading">
+                    <strong>
+                        <!--action name | controller| Texto -->
+                        <a class="navbar-brand" href="@Url.Action("Contacto","Inicio")">Contacto</a>
+                    </strong>
+                </h5>
+           </div>
+            <!-- Top Menu Items Derecha -->
+           <div class="nav navbar-right top-nav">
+                <h5 class="media-heading">
+                    <strong>
+                        <!--action name | controller| Texto -->
+                        <a class="navbar-brand" href="@Url.Action("Nosotros","Inicio")">Nosotros</a>
+                    </strong>
+                </h5>
+           </div>
+            <!-- Top Menu Items Derecha -->
+           <div class="nav navbar-right top-nav">
+                <h5 class="media-heading">
+                    <strong>
+                        <!--action name | controller| Texto -->
+                        <a class="navbar-brand" href="@Url.Action("Index","Inicio")">Inicio</a>
+                    </strong>
+                </h5>
+           </div>  
+
+        </nav>
+ 
+        <!-- Cuerpo -->
+        <div class="center container body-content">
+                    
+                     @RenderBody()   
+             <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - IT Technical Solutions - Sistema de Gestión de Condominios </p>
+            </footer>
+            
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+
+    
+    <script src="../Scripts/jquery.min.js"></script>
+    <script src="../Scripts/bootstrap.min.js"></script>
+    <script src="../Scripts/metisMenu.min.js"></script>
+    <script src="../Scripts/raphael.min.js"></script>
+    <script src="../Scripts/morris.min.js"></script>
+    <script src="../Scripts/morris-data.js"></script>
+    <script src="../Scripts/sb-admin-2.js"></script>
+    <script src="~/Scripts/jquery.js"></script>
+   
+</body>
+</html>

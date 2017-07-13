@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Inicio Sistemas";
+    Layout = "~/Views/Compartida/_PaginaDiseño6.cshtml";
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>
+            <strong>Hola</strong>
+            <label id="lb_nombreu">@Session["UserName"].ToString()...</label>
+            <input type="text" id="lb_usuario" hidden value="@Session["UserID"].ToString()">
+        </h2>
+        <hr />
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+<script src="~/Scripts/jquery.js"></script>
